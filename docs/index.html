@@ -667,51 +667,6 @@
   </aside>
 </section>
 
-<!-- ═══════════ 18. 공개되지 않은 것 ═══════════ -->
-<section class="slide" data-title="공개되지 않은 것과 한계">
-  <div class="kicker">Open questions</div>
-  <h2>Qwen 발표가 남긴 것 — 물어야 할 질문들</h2>
-  <div class="slide-body">
-    <div class="cols" style="gap:24px">
-      <div>
-        <h3>RL environment · reward</h3>
-        <ul style="font-size:17px">
-          <li>environment reset·determinism 확보 방법</li>
-          <li>evaluator 수정을 통한 reward hacking 방지</li>
-          <li>task 간 reward scale normalization</li>
-          <li>model judge와 executable verifier의 calibration</li>
-        </ul>
-      </div>
-      <div>
-        <h3>Harness · evaluation</h3>
-        <ul style="font-size:17px">
-          <li>같은 model·task에서 harness만 바꾼 통제 실험 유무</li>
-          <li>harness별 timeout·token budget 통일 여부</li>
-          <li>retry policy: model에 학습됐나, scaffold 구현인가</li>
-          <li>multi-day 사례의 <strong>실패율</strong> · 총 token/GPU 비용</li>
-          <li>"human intervention 없음"의 정확한 정의</li>
-        </ul>
-      </div>
-      <div>
-        <h3>MM-Plugins</h3>
-        <ul style="font-size:17px">
-          <li>native vision과 plugin tool vision의 routing 기준</li>
-          <li>타 model provider에서의 동작 동일성</li>
-          <li>plugin 증가에 따른 tool-selection complexity</li>
-        </ul>
-      </div>
-    </div>
-    <p style="font-size:16px; color:var(--ink-soft); margin-top:10px">
-      성공 사례 공개만으로는 전체 실패율을 알 수 없다. environment와 verifier 구축에 든 사람의 비용도 미공개.
-      전체 질문 목록(25+) → Appendix G
-    </p>
-  </div>
-  <div class="footer"><span class="src">모두 공식 자료 기준 미공개 항목 — 추정으로 채우지 않음</span><span class="pagenum">18</span></div>
-  <aside class="notes">
-    <p><b>1분.</b> 이 슬라이드는 비판이 아니라 "다음에 볼 것"의 목록. Q&A에서 깊은 질문이 나오면 여기와 Appendix G로 돌아온다.</p>
-  </aside>
-</section>
-
 <!-- ═══════════ 19. 결론 ═══════════ -->
 <section class="slide" data-title="결론">
   <div class="kicker">Conclusion</div>
@@ -735,7 +690,7 @@
   <div class="footer"><span class="src">발표자: jayeon.yoo · 전체 출처 및 evidence matrix: sources 페이지</span><span class="pagenum">19</span></div>
   <aside class="notes">
     <p><b>1분.</b> 결론은 "Qwen이 최고"가 아니라 시스템적 가설. multi-harness 주장은 중요한 방향이지만 training matrix 미공개라는 단서를 마지막으로 한 번 더.</p>
-    <p>Q&A 예상 질문 10개와 답변 초안은 appendix.html 하단.</p>
+    <p>Q&A 예상 질문 10개와 답변 초안은 appendix H. 미공개 항목·open questions 전체 목록(29개)은 appendix G — "실패율은?", "reward hacking 방지는?" 같은 질문이 오면 여기로.</p>
   </aside>
 </section>
 
