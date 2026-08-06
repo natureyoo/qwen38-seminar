@@ -667,6 +667,50 @@
   </aside>
 </section>
 
+<!-- ═══════════ LongHorizon-Harness ═══════════ -->
+<section class="slide" data-title="LongHorizon-Harness — harness 쪽에서의 접근">
+  <div class="kicker">Related work — 반대 방향에서 온 같은 결론</div>
+  <h2>LongHorizon-Harness: model은 그대로, state·verification을 harness로</h2>
+  <div class="slide-body">
+    <div class="cols">
+      <div style="flex:1.1">
+        <p style="font-size:17px; margin-bottom:12px">Qwen3.8이 <strong>model을 environment에 맞춰 RL 학습</strong>시키는 접근이라면,
+        이 프로젝트는 model weight를 건드리지 않고 <strong>long-horizon 실행을 세 역할로 분해한 harness</strong>다 — Manage–Execute–Audit loop.</p>
+        <div class="card" style="border-left:4px solid var(--blue); margin-bottom:10px; padding:12px 18px">
+          <h3 style="margin-bottom:4px">Manager</h3>
+          <p style="font-size:16px">원래 목표·<strong>검증된</strong> 진행 상태·다음 단계를 유지하고 subtask를 선택</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--teal); margin-bottom:10px; padding:12px 18px">
+          <h3 style="margin-bottom:4px">Executor — 매 라운드 fresh context</h3>
+          <p style="font-size:16px">누적된 오류·긴 이력 없이, 명확히 정의된 task 하나만 수행</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--amber); padding:12px 18px">
+          <h3 style="margin-bottom:4px">Auditor — 읽기 전용 독립 검증</h3>
+          <p style="font-size:16px">파일·인터페이스·로그·테스트를 실제 환경에서 검사 — <strong>검증을 통과한 결과만 persistent task state에 기록</strong></p>
+        </div>
+      </div>
+      <div>
+        <h3>같은 model, harness만 교체했을 때</h3>
+        <table style="font-size:16.5px">
+          <tr><th>Benchmark</th><th>기본 실행</th><th>MEA harness</th></tr>
+          <tr><td>WeaveBench (114 tasks)</td><td>51.8%</td><td><strong>80.7%</strong> (+28.9)</td></tr>
+          <tr><td>Terminal-Bench 2.1</td><td>69.7%</td><td><strong>77.2%</strong></td></tr>
+          <tr><td>OSWorld 2.0</td><td>2.8%</td><td><strong>8.3%</strong> (3×)</td></tr>
+          <tr><td>OSWorld 2.0 (Opus 4.7)</td><td>20.0%</td><td><strong>34.3%</strong></td></tr>
+        </table>
+        <p style="font-size:14px; color:var(--ink-soft); margin-top:6px">위 3행은 Qwen3.7-Plus 기준 (논문 수치). backend-agnostic — Claude Code·Codex 등을 AgentAdapter로 교체 장착</p>
+        <p style="font-size:16.5px; margin-top:14px">Auditor는 곧 <strong>inference-time verifier</strong>다 — 검증 가능한 feedback loop라는 같은 구조를, RL 없이 harness 설계만으로 세운 사례.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="src"><a href="https://github.com/AMAP-ML/LongHorizon-Harness">github.com/AMAP-ML/LongHorizon-Harness</a> (MIT, 330 stars) · <a href="https://arxiv.org/abs/2608.01964">arXiv 2608.01964</a> "LongHorizon-Harness: Advancing Long-Horizon Agents for Real-World Tasks" (Ma et al., 2026-08-03) · 2026-08-07 열람</span><span class="pagenum">17</span></div>
+  <aside class="notes">
+    <p><b>1분.</b> 위치가 중요: Qwen3.8과 "다른" 프로젝트지만 결론이 같다 — long-horizon capability는 시스템 속성이라는 것. Qwen은 training(RL environment) 쪽에서, 이쪽은 inference harness 쪽에서 같은 지점에 도달.</p>
+    <p>구두 포인트: "executor를 매번 fresh하게"가 핵심 설계 — 긴 context에 오류가 누적되는 대신, 상태는 Manager의 검증된 task state 파일에만 산다. oh-my-cli의 lease·상태 기계와 정확히 같은 문제의식. Auditor가 검증한 것만 상태에 들어간다는 규칙은 universal reward system의 inference-time 버전.</p>
+    <p>수치 주의: 논문 자체 평가이며(독립 재현 미확인), OSWorld 2.0은 절대값이 낮은(2.8→8.3%) 어려운 벤치마크라 배율이 커 보이는 것.</p>
+  </aside>
+</section>
+
 <!-- ═══════════ 19. 결론 ═══════════ -->
 <section class="slide" data-title="결론">
   <div class="kicker">Conclusion</div>

@@ -13,6 +13,7 @@
 | 재현 대상 논문 | https://arxiv.org/abs/2605.22389 | "Unified Data Selection for LLM Reasoning" (Li et al., 2026-05-21). **사전 후보였던 2608.01964는 다른 논문**(LongHorizon-Harness) |
 | 논문 OpenReview | https://openreview.net/forum?id=heVn5cNfje | 공식 코드 저장소는 확인되지 않음 |
 | OpenAI Jalapeño | https://openai.com/index/openai-broadcom-jalapeno-inference-chip/ | 2026-06-24. wafer 사진 원본: images.ctfassets.net (asset-manifest 참조) |
+| LongHorizon-Harness | https://github.com/AMAP-ML/LongHorizon-Harness · https://arxiv.org/abs/2608.01964 | "LongHorizon-Harness: Advancing Long-Horizon Agents" (Ma et al., 2026-08-03). MIT, 330 stars (2026-08-07). MEA loop 수치는 논문 자체 평가 |
 | Anthropic 채용공고 | https://job-boards.greenhouse.io/anthropic/jobs/5231612008 | "Research Engineer, Chip Design RL (Reinforcement Learning)", 2026-08-07 LIVE |
 
 ## Qwen 발표가 직접 링크한 자료
