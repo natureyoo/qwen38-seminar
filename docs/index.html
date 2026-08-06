@@ -383,7 +383,7 @@
       </div>
     </div>
   </div>
-  <div class="footer"><span class="src">Qwen3.8 blog · 대상 논문: <strong>arXiv 2605.22389</strong> "Unified Data Selection for LLM Reasoning" (Li et al., 2026-05 — HES metric, AIME24/25 평가). 사전에 받은 후보 ID 2608.01964는 다른 논문(LongHorizon-Harness)으로 확인 — 검증 상세는 sources</span><span class="pagenum">10</span></div>
+  <div class="footer"><span class="src">Qwen3.8 blog · 대상 논문: <strong>arXiv 2605.22389</strong> "Unified Data Selection for LLM Reasoning" (Li et al., 2026-05 — HES metric, AIME24/25 평가)</span><span class="pagenum">10</span></div>
   <aside class="notes">
     <p><b>2분.</b> 재현(37h)과 개선(88h)의 비율이 흥미로운 포인트 — 재현은 결정적 verifier(원 논문 수치)가 있어 빠르고, 개선은 탐색이라 느리다.</p>
     <p>Round별 결과(질문 대비): ① difficulty-split +0.84 → 50.42% ② entropy–score-gap weighting +2.09 → 51.67% ③ selection width tuning +1.67 → 51.25% ④ "nhighgate"(hard decision point 수 세기) +2.71 → 52.29%. base model은 Qwen3-8B fine-tuning.</p>
@@ -671,25 +671,29 @@
 <section class="slide" data-title="결론">
   <div class="kicker">Conclusion</div>
   <div class="slide-body center">
-    <p class="statement" style="font-size:27px; text-align:left; max-width:1080px; line-height:1.5">
-      1 · Long-horizon capability는 model 단독 속성이 아니다 —<br>
-      <span style="font-family:var(--mono); font-size:19px; color:var(--blue)">Model × Harness reliability × Environment quality × Verifier coverage × State management × Compute budget</span><br>
-      2 · Agentic RL의 핵심 자산은 task text가 아니라 <span class="hl">학습 가능한 업무 환경</span>이다 —
-      executable workspace · toolchain · verifier · reset · failure trajectory.<br>
-      3 · 칩 설계는 검증 가능한 폐루프 덕에 적합한 domain이지만, open-source 45nm flow와
-      production tape-out 사이의 간극은 크다.
-    </p>
-    <div style="max-width:1080px; margin-top:18px; text-align:left; font-size:17px; line-height:1.6; border-top:2px solid var(--line); padding-top:16px">
-      Qwen3.8 발표에서 가장 중요한 것은 또 하나의 더 큰 모델이 아니라, <strong>현실 업무를 rollout 가능하고
-      reward 가능한 environment로 바꾸면 agent의 자율 수행 범위를 며칠 단위까지 확장할 수 있다는
-      시스템적 가설</strong>이다. Qwen-MM-Plugins는 같은 방향을 multimodal domain으로 확장한다 —
-      보고, 행동하고, 결과를 다시 검증하는 harness를 만들려는 시도다.
+    <div style="max-width:980px; text-align:left; display:flex; flex-direction:column; gap:26px">
+      <p style="font-size:24px; line-height:1.5">
+        1 · Long-horizon capability는 model이 아니라 <strong>시스템의 속성</strong>이다<br>
+        <span style="font-family:var(--mono); font-size:16.5px; color:var(--blue)">Model × Harness × Environment × Verifier × State × Budget</span>
+      </p>
+      <p style="font-size:24px; line-height:1.5">
+        2 · Agentic RL의 핵심 자산은 <strong>학습 가능한 업무 환경</strong>이다<br>
+        <span style="font-size:17px; color:var(--ink-soft)">executable workspace · toolchain · verifier · reset 가능성</span>
+      </p>
+      <p style="font-size:24px; line-height:1.5">
+        3 · 칩 설계는 검증 가능한 폐루프라 적합한 domain이다<br>
+        <span style="font-size:17px; color:var(--ink-soft)">단, 공개 45nm flow와 production tape-out의 간극은 크다</span>
+      </p>
+      <p style="font-size:25px; line-height:1.5; font-weight:750; color:var(--blue-deep); border-top:2px solid var(--line); padding-top:24px">
+        현실 업무를 rollout 가능하고 reward 가능한 environment로 바꾸는 것 —<br>
+        그것이 자율 실행 시간을 며칠 단위로 늘린 방법이다.
+      </p>
     </div>
-    <p style="margin-top:16px; font-size:16px; color:var(--ink-soft)">Q&amp;A — 출처: sources.html · 상세: appendix.html</p>
   </div>
   <div class="footer"><span class="src">발표자: jayeon.yoo · 전체 출처 및 evidence matrix: sources 페이지</span><span class="pagenum">19</span></div>
   <aside class="notes">
     <p><b>1분.</b> 결론은 "Qwen이 최고"가 아니라 시스템적 가설. multi-harness 주장은 중요한 방향이지만 training matrix 미공개라는 단서를 마지막으로 한 번 더.</p>
+    <p>구두 마무리(슬라이드에서 뺀 문장): Qwen-MM-Plugins는 같은 방향을 multimodal domain으로 확장한다 — 보고, 행동하고, 결과를 다시 검증하는 harness를 만들려는 시도다.</p>
     <p>Q&A 예상 질문 10개와 답변 초안은 appendix H. 미공개 항목·open questions 전체 목록(29개)은 appendix G — "실패율은?", "reward hacking 방지는?" 같은 질문이 오면 여기로.</p>
   </aside>
 </section>
