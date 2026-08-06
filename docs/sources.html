@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sources — Qwen3.8 세미나</title>
+<style>
+:root { --ivory:#faf7f0; --ink:#1c2433; --ink-soft:#4a5568; --blue:#1e4fa3; --blue-deep:#14335f;
+  --blue-soft:#dce7f7; --amber:#b4690e; --amber-soft:#f7ead8; --teal:#0e7a6e; --line:#d8d2c4; --red:#a33030; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  background:var(--ivory); color:var(--ink); line-height:1.65; }
+main { max-width:1080px; margin:0 auto; padding:48px 32px 96px; }
+h1 { color:var(--blue-deep); font-size:34px; margin-bottom:8px; }
+h2 { color:var(--blue-deep); font-size:24px; margin:40px 0 12px; padding-top:18px; border-top:2px solid var(--line); }
+p, li { font-size:15.5px; } ul, ol { padding-left:24px; margin-bottom:10px; }
+table { border-collapse:collapse; width:100%; font-size:13.5px; margin:12px 0; }
+th, td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; }
+th { background:var(--blue-soft); color:var(--blue-deep); }
+td { background:#fff; }
+a { color:var(--blue); word-break:break-all; }
+code { font-family:ui-monospace,Menlo,monospace; font-size:.92em; background:#f3eee2; padding:1px 5px; border-radius:4px; }
+.lv { display:inline-block; font-family:ui-monospace,Menlo,monospace; font-size:11px; padding:1px 7px; border-radius:12px; border:1px solid; white-space:nowrap; }
+.l1 { color:var(--blue); border-color:var(--blue); background:var(--blue-soft); }
+.l2 { color:var(--teal); border-color:var(--teal); background:#ddf0ed; }
+.l3 { color:#6b21a8; border-color:#6b21a8; background:#f0e4fa; }
+.l4 { color:var(--amber); border-color:var(--amber); background:var(--amber-soft); }
+.open { color:var(--red); border-color:var(--red); background:#f7e3e3; }
+.note { background:var(--amber-soft); border-left:4px solid var(--amber); padding:10px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:14.5px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Sources &amp; Claim–Evidence Matrix</h1>
+<p style="color:var(--ink-soft)"><a href="index.html">← 발표로 돌아가기</a> · <a href="appendix.html">Appendix</a> · 모든 조회일: 2026-08-07</p>
+
+<h2>Evidence level 정의</h2>
+<p>
+<span class="lv l1">L1 공식 주장</span> 회사의 공식 발표·문서·채용 페이지의 주장 &nbsp;
+<span class="lv l2">L2 저장소 확인</span> 공개 저장소·로그·artifact에서 직접 확인 &nbsp;
+<span class="lv l3">L3 독립 재현</span> 제3자의 독립적 재현 &nbsp;
+<span class="lv l4">L4 물리적 실증</span> 실제 production/physical deployment &nbsp;
+<span class="lv open">미공개/미검증</span>
+</p>
+
+<h2>1차 출처</h2>
+<ul>
+<li>Qwen3.8 공식 발표 — "Qwen3.8-Max: A New Bar for Coding and Cowork" (2026-08-03): <a href="https://qwen.ai/blog?id=qwen3.8">https://qwen.ai/blog?id=qwen3.8</a><br>
+<small>※ JS SPA라 사내 프록시·크롤러에서 본문이 안 열릴 수 있음. 전체 본문 사본과 그림은 이 저장소에 보존됨. 중국어 미러: qwenlm.github.io/zh/blog/qwen3.8/</small></li>
+<li>oh-my-cli 공식 저장소: <a href="https://github.com/qwen-code-dev-bot/oh-my-cli">https://github.com/qwen-code-dev-bot/oh-my-cli</a> (Apache-2.0)</li>
+<li>Qwen-MM-Plugins 공식 저장소: <a href="https://github.com/QwenLM/Qwen-MM-Plugins">https://github.com/QwenLM/Qwen-MM-Plugins</a> (Apache-2.0)</li>
+<li>재현 대상 논문: <a href="https://arxiv.org/abs/2605.22389">arXiv 2605.22389 — "Unified Data Selection for LLM Reasoning"</a> (Xiaoyuan Li et al., 2026-05-21) · <a href="https://openreview.net/forum?id=heVn5cNfje">OpenReview</a> · 공식 코드 저장소는 확인되지 않음</li>
+<li>OpenAI–Broadcom Jalapeño 공식 발표 (2026-06-24): <a href="https://openai.com/index/openai-broadcom-jalapeno-inference-chip/">https://openai.com/index/openai-broadcom-jalapeno-inference-chip/</a></li>
+<li>Anthropic 공식 채용공고 — Research Engineer, Chip Design RL (Reinforcement Learning): <a href="https://job-boards.greenhouse.io/anthropic/jobs/5231612008">https://job-boards.greenhouse.io/anthropic/jobs/5231612008</a> (2026-08-07 LIVE 확인)</li>
+<li>Qwen 발표 본문이 링크한 기타: <a href="https://tianchi.aliyun.com/competition/entrance/532277">Tianchi WWW2025 challenge</a> · <a href="https://www.frontierswe.com">frontierswe.com</a> · <a href="https://artificialanalysis.ai/evaluations/terminalbench-v2-1">Artificial Analysis Terminal Bench 2.1</a></li>
+</ul>
+
+<div class="note"><b>출처 검증 노트 (2026-08-07):</b><br>
+① 사전에 제공받은 논문 후보 arXiv <b>2608.01964</b>는 다른 논문("LongHorizon-Harness: Advancing Long-Horizon Agents for Real-World Tasks", 2026-08-03)으로 확인 — Qwen 발표가 실제 링크한 논문은 <b>2605.22389</b>다.<br>
+② OpenAI 페이지의 요약 bullet은 "design to production in nine months", 본문은 "initial design to manufacturing <b>tape-out</b> in just nine months" — 내부 불일치가 있으며 본문(tape-out)이 정확한 쪽이다. "fastest ASIC development cycle ever"에는 "what we believe to be"라는 hedge가 붙어 있다.<br>
+③ Qwen3.8 발표의 칩 섹션 미디어는 <code>&lt;video&gt;</code>가 아니라 <b>iframe embed</b>다: <a href="https://docs.qwenlm.ai/resources/CCoLV_eda_agent_square.html">docs.qwenlm.ai/resources/CCoLV_eda_agent_square.html</a> — "Neon Glass Chip City"라는 자기완결형 인터랙티브 3D 시각화(three.js 인라인, 외부 의존성 없음, ~9MB). 로컬 사본을 <code>docs/assets/chip/eda_agent.html</code>로 보존해 슬라이드 13에 embed했다(1차 조사에서 video 태그만 탐색해 누락했던 것을 2026-08-07 정정). PDF 출력 시에는 공식 수치 기반 die 비교 그림으로 대체된다.<br>
+④ Qwen3.8의 model card·tech report·HF 링크는 발표 페이지에 없음(open weights는 "next week" 예고만).</div>
+
+<h2>Claim–Evidence Matrix</h2>
+<table>
+<tr><th>주장</th><th>Level</th><th>근거</th></tr>
+<tr><td>Qwen3.8-Max 2.4T params (95B active), 1M context</td><td><span class="lv l1">L1</span></td><td>blog 본문(파라미터) / config snippet(context) — tech report 없음</td></tr>
+<tr><td>"jointly scaling RL environments and compute", Task×Workspace×Harness 축, "compounds combinatorially"</td><td><span class="lv l1">L1</span></td><td>blog "Scaling Real-World RL Systems" 절 원문</td></tr>
+<tr><td>SFT 0.474 → 0.725 @4,000 envs (10+ 벤치마크 종합)</td><td><span class="lv l1">L1</span></td><td>공식 Fig 1 — 수치는 그림에만 존재, 본문 서술 없음</td></tr>
+<tr><td>5개 harness에서 유사 성능 (CoWorkBench 73.2–75.8)</td><td><span class="lv l1">L1</span></td><td>공식 Fig 2 — baseline 모델들은 단일 harness(OpenClaw/OpenCode)로만 평가</td></tr>
+<tr><td>online balancer가 tasks·difficulty·workspaces·harnesses를 balance</td><td><span class="lv l1">L1</span></td><td>blog 원문 — 4개 축 명시. 비율·분포는 미공개</td></tr>
+<tr><td>universal reward: execution-based checking + rubric-conditioned adjudication(text/visual) + agentic inspection</td><td><span class="lv l1">L1</span></td><td>blog 원문. aggregation formula 미공개</td></tr>
+<tr><td>oh-my-cli: ~16일 자율 운영, 265 commits / 127 PRs / 151 issues (2026-07-30 기준)</td><td><span class="lv l2">L2</span></td><td>blog 주장 + GitHub API로 세 수치 모두 정확히 재확인 (created&lt;2026-07-31 필터, 2026-08-07 조회)</td></tr>
+<tr><td>oh-my-cli의 ready→leased→active 상태 기계·dispatcher·watchdog</td><td><span class="lv l2">L2</span></td><td>blog 서술 + 저장소의 AUTONOMY.md, .autonomy/, label 체계, CI workflow에서 직접 확인</td></tr>
+<tr><td>oh-my-cli에서 사람 개입 없음</td><td><span class="lv l2">L2</span> 부분</td><td>제품 코드는 전부 bot commit(663) — 단 governance/harness 규칙은 사람(qqqys, 13 commits)이 수정. "무개입"은 제품 개발 한정으로 읽어야 정확</td></tr>
+<tr><td>논문 재현: ~125h, 7,600 LoC, 1,100+ actions, 33 GPU runs, 37h 재현/88h 개선, AIME24 +2.71 (49.58→52.29)</td><td><span class="lv l1">L1</span></td><td>blog 원문 수치 전부 확인. 독립 재현(제3자)은 <span class="lv open">미확인</span></td></tr>
+<tr><td>칩 설계: 500 turns, 71 evals, 13 milestones, 8,298→678 gates, milestone별 수치</td><td><span class="lv l1">L1</span></td><td>blog 원문 수치 전부 확인. 원 trajectory log는 미공개 → L2 불가</td></tr>
+<tr><td>OpenROAD 결과: die 106×106→46×46 µm², wire 33,369→4,187 µm, slack −4.46→+0.66 ns @500MHz</td><td><span class="lv l1">L1</span></td><td>blog 원문. physical layout 결과이며 fabricated silicon 아님 (Nangate45 = 공개 45nm 연구용)</td></tr>
+<tr><td>Qwen-MM-Plugins = skill + optional MCP server 구조, 6 capability, 9 harness 지원</td><td><span class="lv l2">L2</span></td><td>공식 README·소스 트리에서 tool 수까지 직접 확인 (blender 22, freecad 14, core 14 등)</td></tr>
+<tr><td>Qwen-MM-Plugins가 Qwen3.8 RL training에 사용됨</td><td><span class="lv open">근거 없음</span></td><td>저장소·blog 모두 해당 주장 없음. 확인된 접점은 LVBench/EgoLife <b>평가</b>에 사용된 것뿐</td></tr>
+<tr><td>Jalapeño: 첫 Intelligence Processor, design→tape-out 9개월, engineering sample에서 ML workload 실행</td><td><span class="lv l4">L4</span> (tape-out)</td><td>OpenAI 공식 발표. 단 최종 성능은 측정 중, technical report 미공개</td></tr>
+<tr><td>Jalapeño 설계를 OpenAI 모델이 가속</td><td><span class="lv l1">L1</span> (모호)</td><td>"the use of OpenAI models to accelerate parts of the design and optimization process" — 한 구절, 범위·정량 근거 없음</td></tr>
+<tr><td>Anthropic이 chip-design RL environment와 production training을 구축 중</td><td><span class="lv l1">L1</span> (채용 신호)</td><td>공식 채용공고 원문: "Invent, design, and implement RL environments and evaluations for agentic RTL generation…", "Deliver your work into research and production training runs"</td></tr>
+<tr><td>"frontier 경쟁이 자율 실행 시간 경쟁으로 확장" 등 시스템적 해석 전반</td><td><span class="lv l4" style="color:var(--amber)">발표자 해석</span></td><td>슬라이드에서 주황색 박스로 구분 표시</td></tr>
+</table>
+
+<h2>주요 원문 인용 (발췌)</h2>
+<ul>
+<li>"By jointly scaling RL environments and compute, we lift general working competence uniformly across several popular harnesses (QwenWork / Claude Code / Codex / OpenClaw / Hermes)."</li>
+<li>"Continuously scaling decoupled real environments along independent axes — Task (single-task → multi-task → multi-day), Workspace (multi-file → hierarchical folders → complex heterogeneous folders), and Harness (category, version, skills) — so environment growth compounds combinatorially rather than requiring bespoke integration."</li>
+<li>"A Universal Reward System that internalizes heterogeneous verification — spanning execution-based checking, rubric-conditioned adjudication over text and rendered visual output, and agentic inspection — under automatically scalable rubrics."</li>
+<li>"An online data balancer that shapes every batch to keep its distribution over tasks, difficulty, workspaces, and harnesses highly balanced, suppressing inter-batch gradient variance…"</li>
+<li>"As of July 30, 2026, after approximately 16 days of fully autonomous AI operation, the repository had accumulated 265 commits, 127 PRs, and 151 issues…"</li>
+<li>"Working completely on its own for about five days (~125 hours of continuous effort) … wrote roughly 7,600 lines of code, took over 1,100 actions, and ran 33 rounds of GPU training."</li>
+<li>"approximately 500 turns and 71 evaluations across 13 key milestones … While its first functionally viable design measured 8,298 gates, Qwen3.8-Max drove this down to 678 gates."</li>
+<li>"…slashing 6,288 gates in one move—accounting for over 80% of the total area reduction." (turn 22)</li>
+<li>"Each design iteration is strictly validated through automated cocotb functional tests, with physical feasibility fully guaranteed by OpenROAD backend validation." <em>(발표에서 비판적으로 검토한 표현)</em></li>
+<li>"Jalapeño was co-developed from initial design to manufacturing tape-out in just nine months, and … what we believe to be the fastest ASIC development cycle ever achieved in high-performance advanced semiconductors." (OpenAI)</li>
+<li>"As a Research Engineer, you'll advance our models' ability to design silicon. Hardware design is difficult and unforgiving – exactly the sort of domain we want Claude to excel at." (Anthropic)</li>
+</ul>
+
+<h2>2차 출처 사용 원칙</h2>
+<p>이 발표의 모든 수치·인용은 1차 출처(공식 발표 원문, 공식 저장소, arXiv 원문, 공식 채용 페이지)에서 직접 확인했다. 검색 요약문에서 발견된 오류(QwenQoderBench 평가 설정을 FrontierSWE로 오귀속, 잘못된 arXiv ID)는 원문 대조로 정정했으며, SNS·2차 기사는 사용하지 않았다.</p>
+</main>
+</body>
+</html>

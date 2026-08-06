@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix — Qwen3.8 세미나</title>
+<style>
+:root { --ivory:#faf7f0; --ink:#1c2433; --ink-soft:#4a5568; --blue:#1e4fa3; --blue-deep:#14335f;
+  --blue-soft:#dce7f7; --amber:#b4690e; --amber-soft:#f7ead8; --teal:#0e7a6e; --line:#d8d2c4; --red:#a33030; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  background:var(--ivory); color:var(--ink); line-height:1.65; }
+main { max-width:1080px; margin:0 auto; padding:48px 32px 96px; }
+h1 { color:var(--blue-deep); font-size:34px; margin-bottom:8px; }
+h2 { color:var(--blue-deep); font-size:24px; margin:44px 0 14px; padding-top:20px; border-top:2px solid var(--line); }
+h3 { color:var(--blue); font-size:18px; margin:22px 0 8px; }
+p, li { font-size:15.5px; } li { margin-bottom:5px; } ul, ol { padding-left:24px; margin-bottom:10px; }
+table { border-collapse:collapse; width:100%; font-size:14px; margin:12px 0; }
+th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; }
+th { background:var(--blue-soft); color:var(--blue-deep); }
+td { background:#fff; }
+code { font-family:ui-monospace,Menlo,monospace; font-size:.92em; background:#f3eee2; padding:1px 5px; border-radius:4px; }
+a { color:var(--blue); }
+.note { background:var(--amber-soft); border-left:4px solid var(--amber); padding:10px 16px; border-radius:0 8px 8px 0; margin:12px 0; font-size:14.5px; }
+img.shot { max-width:100%; border:1px solid var(--line); border-radius:8px; margin:10px 0; }
+nav { font-size:14px; margin-bottom:24px; }
+@media print { body { background:#fff; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Appendix</h1>
+<p style="color:var(--ink-soft)">Qwen3.8 세미나 부록 · <a href="index.html">← 발표로 돌아가기</a> · <a href="sources.html">출처 페이지</a></p>
+<nav>
+A. <a href="#a">Benchmark별 harness 설정</a> ·
+B. <a href="#b">Model/Harness/Environment 책임 분리</a> ·
+C. <a href="#c">Reward·balancing 상세 논점</a> ·
+D. <a href="#d">Coding ↔ chip-design agent 대응</a> ·
+E. <a href="#e">EDA glossary</a> ·
+F. <a href="#f">Qwen-MM-Plugins 상세</a> ·
+G. <a href="#g">Open questions 전체</a> ·
+H. <a href="#h">예상 Q&amp;A 10</a> ·
+I. <a href="#i">검증 미완료 항목</a> ·
+J. <a href="#j">원본 캡처</a>
+</nav>
+
+<h2 id="a">A · Benchmark별 harness/평가 설정</h2>
+<div class="note" id="bench-note">Qwen3.8 blog 본문·각주에서 추출한 벤치마크별 평가 설정. 각 행의 "비교 성격"은 순수 model comparison인지 model+harness system comparison인지의 발표자 분류다.</div>
+<table>
+<tr><th>Benchmark (Qwen3.8-Max 점수)</th><th>Harness</th><th>N / timeout / 설정</th><th>비고 (각주 원문 근거)</th><th>비교 성격</th></tr>
+<tr><td>Terminal Bench 2.1 (86.6)</td><td>Claude Code</td><td>avg@10, 5h timeout, max_tokens=131,072</td><td>타 모델은 "best published score across harnesses" (Opus4.8·Fable5는 Terminus 2, GPT-5.6 Sol은 Codex)</td><td>model+harness system — harness가 모델마다 다름</td></tr>
+<tr><td>SWE-bench Pro (67.7)</td><td>Claude Code</td><td>temp=1.0, top_p=0.95, 256K context</td><td>"problematic tasks corrected", 전 baseline을 수정판에서 재평가(in-house)</td><td>system (동일 harness, in-house 재평가)</td></tr>
+<tr><td>DeepSWE 1.1 (56.6)</td><td>Claude Code + mini-SWE-agent</td><td>둘 중 높은 점수</td><td>"Qwen3.8-Max performs best on Claude Code" 명시</td><td>system (best-of-harness)</td></tr>
+<tr><td>NL2Repo-Bench (55.9)</td><td>Claude Code</td><td>—</td><td>reward hacking 방지 위해 pip install/git clone 등 차단</td><td>system</td></tr>
+<tr><td>FrontierSWE (73.5)</td><td>Claude Code</td><td>MEAN@5</td><td>타 모델은 공식 leaderboard(2026-08-03) 수치</td><td>system — 평가 주체 혼재</td></tr>
+<tr><td>MLS-Bench-Lite (41.0)</td><td>Claude Code</td><td>5h, max_tokens=131,072</td><td>—</td><td>system</td></tr>
+<tr><td>PaperBench (93.0)</td><td>BasicAgent, Code-Dev</td><td>avg@3, max 12h/run</td><td><b>judge = Claude Opus 4.6</b></td><td>system + model judge</td></tr>
+<tr><td>QwenSWEBench (80.7, in-house)</td><td>Claude Code</td><td>avg@3, 8h, max_tokens=32,768, temp=1.0, 256K</td><td>in-house</td><td>system, 비공개 벤치마크</td></tr>
+<tr><td>QwenQoderBench (58.4, in-house)</td><td>Claude Code</td><td>avg@5, 6h, max_tokens=32,768, temp=1.0, 256K</td><td>in-house (일부 검색 결과가 이 설정을 FrontierSWE로 오귀속 — 원문 확인으로 정정)</td><td>system, 비공개</td></tr>
+<tr><td>QwenReactBench (Elo 1724) / QwenSVGBench (1713)</td><td>Claude Code</td><td>auto-render + multimodal judge, BT/Elo</td><td>in-house, 한/영 병용</td><td>system + visual judge</td></tr>
+<tr><td>CoWorkBench (74.8) / WorkSpaceBench (67.7) / JobBench (53.4)</td><td>Fig 2: 5개 harness 병렬</td><td>—</td><td>baseline 모델은 OpenClaw 단일(JobBench는 OpenCode)로만 평가</td><td>cross-harness 실험 (단 baseline은 단일 harness)</td></tr>
+<tr><td>SkillsBench (70.2, public v1.1)</td><td>Qwen: OpenCode / Opus·Fable: Claude Code / GPT: Codex</td><td>87 tasks, avg@3</td><td>모두 in-house testing</td><td>system — harness 상이</td></tr>
+<tr><td>WideSearch (81.9)</td><td>Qwen: Qwen-Agent / 타 모델: Claude Code</td><td>item-F1, 4 runs</td><td><b>자사만 다른 harness 사용</b></td><td>system — 비교 가능성 제한</td></tr>
+<tr><td>Automation-Bench (27.3)</td><td>—</td><td>600-task public subset</td><td>—</td><td>—</td></tr>
+<tr><td>$OneMillion-Bench / PLawBench</td><td>—</td><td>—</td><td>judge = gemini-3.1-pro-preview</td><td>model judge 의존</td></tr>
+<tr><td>Vision2Web (69.0)</td><td>Claude Code</td><td>—</td><td>judge = gpt-5.4-2026-03-05</td><td>system + model judge</td></tr>
+<tr><td>RecreationBench (51.7, in-house)</td><td>Hybrid Agent</td><td>5 platforms, black-box 관찰</td><td>Fable5 56.1이 최고 — Qwen 열세 공개</td><td>system, 비공개</td></tr>
+<tr><td>LVBench 81.8 / EgoLife (w/ Mem.)</td><td>—</td><td>—</td><td>"a memory system built with Qwen-MM-Plugins" 사용</td><td>system — plugin이 평가에 개입</td></tr>
+</table>
+<div class="note"><b>관찰 3가지 (발표자):</b> ① coding agent 벤치마크의 대부분이 <b>Claude Code harness</b>로 평가됨 — "Qwen3.8-Max의 점수"는 대부분 model+Claude Code system의 점수다. ② timeout(5h/6h/8h/12h)·max_tokens(32K/131K)·N(avg@3/5/10, MEAN@5)이 벤치마크마다 다르다 — 단일 "능력 지표"로 합산 불가. ③ judge 모델(Opus 4.6, gemini-3.1-pro, gpt-5.4)이 벤치마크마다 다르고 일부는 경쟁사 모델 — judge bias 방향을 단정할 수 없다. footnote 1 "Fable5 results may involve fallbacks"도 비교 조건 차이의 예.</div>
+
+<h2 id="b">B · Model / Harness / Environment 책임 분리</h2>
+<table>
+<tr><th>능력/현상</th><th>Model (weight)</th><th>Inference harness</th><th>RL environment</th></tr>
+<tr><td>다음 action 선택, tool 선택, 추론</td><td>✓ 핵심</td><td>tool schema로 제약</td><td>학습 시 형성</td></tr>
+<tr><td>500턴 동안 이력 유지</td><td>context 내 참조</td><td>✓ compaction·external state·logs</td><td>—</td></tr>
+<tr><td>실패 후 재시도</td><td>정책적 판단(학습됨)</td><td>✓ retry/recovery 로직·watchdog</td><td>학습 시 실패 경험 제공</td></tr>
+<tr><td>병렬 작업 분배 (oh-my-cli)</td><td>—</td><td>✓ issue lease·dispatch</td><td>—</td></tr>
+<tr><td>"어떤 일을 잘하는가"의 분포</td><td>✓ post-training 결과</td><td>—</td><td>✓ task/env 분포가 결정</td></tr>
+<tr><td>정답 판정</td><td>—</td><td>test 실행 결과 전달</td><td>✓ verifier·rubric·reward</td></tr>
+<tr><td>token/time budget</td><td>—</td><td>✓ 설정·강제</td><td>✓ termination policy</td></tr>
+<tr><td>weight 업데이트</td><td>대상</td><td>일어나지 않음</td><td>✓ learner (training에서만)</td></tr>
+</table>
+
+<h2 id="c">C · Universal reward · online balancing 상세 논점</h2>
+<h3>Reward 구성에서 생기는 문제</h3>
+<ul>
+<li><b>Normalization:</b> 이종 task(코드 테스트 통과율 vs rubric 점수 vs 시각 평가)의 scale을 맞추지 않으면 특정 환경이 gradient를 지배한다.</li>
+<li><b>Binary + partial 결합:</b> 최종 성공(binary)과 중간 진척(partial)을 어떻게 섞는지에 따라 탐색 행동이 달라진다. sparse reward만 있으면 long-horizon 학습이 어렵다.</li>
+<li><b>Deterministic verifier vs model judge:</b> 전자는 정확하지만 커버리지가 좁고, 후자는 커버리지가 넓지만 bias·correlated error(judge와 policy가 유사 계열 모델일 때)가 생긴다. calibration 방법 미공개.</li>
+<li><b>Reward hacking:</b> verifier가 environment 안의 코드라면 agent가 verifier를 수정·우회할 수 있다. evaluator 보호 방식 미공개. (oh-my-cli의 protected-paths workflow는 inference-time에서 유사 문제를 다루는 힌트)</li>
+<li><b>Visual artifact 평가의 reproducibility:</b> rendering 환경·버전에 따라 같은 artifact가 다르게 보일 수 있다.</li>
+<li><b>유지보수 비용:</b> task-specific verifier는 정확하지만 환경 수에 비례해 사람 비용이 든다 — universal abstraction과의 trade-off.</li>
+</ul>
+<h3>Online balancing에서 생기는 문제</h3>
+<ul>
+<li>쉬운 task의 batch 독점 → 학습 신호는 많지만 정보량이 적다.</li>
+<li>긴 task의 compute 독점 → rollout당 비용 편차가 크다.</li>
+<li>성공률 ~0% task: 신호 없음. ~100% task: 배울 것 없음. 중간 난이도 유지가 곧 auto-curriculum이다 — 단, curriculum(순서 설계)과 balanced sampling(분포 유지)은 다른 개념.</li>
+<li>hard-example mining과의 관계, off-policy trajectory 재사용, 실패 trajectory 활용 방식: 모두 미공개.</li>
+<li>long-horizon credit assignment: 500턴 중 어느 결정이 보상에 기여했는가 — 공개된 방법 없음.</li>
+</ul>
+
+<h2 id="d">D · Coding agent ↔ Chip-design agent 대응</h2>
+<table>
+<tr><th>Coding agent</th><th>Chip-design agent</th></tr>
+<tr><td>Source code</td><td>RTL</td></tr>
+<tr><td>Compiler/runtime</td><td>Icarus Verilog / Yosys</td></tr>
+<tr><td>Unit test</td><td>cocotb test</td></tr>
+<tr><td>Test failure</td><td>Simulation mismatch</td></tr>
+<tr><td>Runtime performance</td><td>Cell count / PPA</td></tr>
+<tr><td>Integration environment</td><td>OpenROAD flow</td></tr>
+<tr><td>Deployment constraint</td><td>Timing / area / routing</td></tr>
+<tr><td>CI success</td><td>Functional correctness + timing closure</td></tr>
+<tr><td>Code patch</td><td>RTL / architecture modification</td></tr>
+</table>
+
+<h2 id="e">E · EDA Glossary (AI 전문가용 최소 사전)</h2>
+<table>
+<tr><th>용어</th><th>뜻</th><th>agent 관점 한 줄</th></tr>
+<tr><td>RTL (Register-Transfer Level)</td><td>클록 단위 레지스터 간 데이터 이동으로 회로를 기술하는 추상화 수준. Verilog/VHDL로 작성</td><td>agent가 편집하는 "소스 코드"</td></tr>
+<tr><td>Icarus Verilog</td><td>오픈소스 Verilog simulator</td><td>인터프리터/런타임</td></tr>
+<tr><td>cocotb</td><td>Python 기반 HDL testbench 프레임워크</td><td>pytest에 해당</td></tr>
+<tr><td>Synthesis (Yosys)</td><td>RTL을 gate-level netlist(표준 cell의 조합)로 변환</td><td>컴파일. cell count가 논리 면적 proxy</td></tr>
+<tr><td>Standard cell</td><td>미리 설계된 논리 primitive(NAND, FF 등)의 라이브러리 단위</td><td>컴파일 타깃의 instruction set</td></tr>
+<tr><td>Nangate45</td><td>공개 연구·교육용 45nm standard-cell 라이브러리/PDK</td><td>연습용 target platform — production 공정 아님</td></tr>
+<tr><td>OpenROAD</td><td>오픈소스 physical implementation flow (floorplan→place→CTS→route)</td><td>배포/통합 환경</td></tr>
+<tr><td>Floorplan / Placement / Routing</td><td>die 위에 블록·cell을 배치하고 배선</td><td>물리적 실현 단계</td></tr>
+<tr><td>CTS (Clock-Tree Synthesis)</td><td>클록을 모든 FF에 균등 지연으로 분배하는 트리 합성</td><td>—</td></tr>
+<tr><td>STA (Static Timing Analysis)</td><td>모든 경로의 타이밍을 정적으로 검사</td><td>성능 verifier</td></tr>
+<tr><td>Timing slack</td><td>목표 클록 대비 여유(+) 또는 위반(−) 시간</td><td>부호 있는 제약 신호. +0.66ns = 500MHz에서 통과</td></tr>
+<tr><td>PPA</td><td>Power / Performance / Area</td><td>multi-objective 평가 지표</td></tr>
+<tr><td>Timing closure</td><td>모든 타이밍 제약 만족 상태 도달</td><td>success condition</td></tr>
+<tr><td>Sign-off</td><td>제조 전 최종 검증(DRC/LVS/정밀 STA 등)</td><td>Qwen 사례는 여기 도달 안 함</td></tr>
+<tr><td>Tape-out</td><td>최종 설계 데이터를 fab에 전달하는 시점</td><td>Jalapeño는 도달, Qwen 사례는 아님</td></tr>
+<tr><td>FSM</td><td>Finite State Machine — 제어 로직의 상태 기계</td><td>turn 60–113에서 pruning된 대상</td></tr>
+<tr><td>Bit-width trimming</td><td>필요 이상의 데이터 폭을 줄여 논리 절감</td><td>불필요한 자료형 축소에 해당</td></tr>
+</table>
+
+<h2 id="f">F · Qwen-MM-Plugins 상세 (2026-08-07 기준)</h2>
+<p>저장소: <a href="https://github.com/QwenLM/Qwen-MM-Plugins">github.com/QwenLM/Qwen-MM-Plugins</a> · 생성 2026-07-29, 첫 공개 commit "init for release" 2026-08-03 (Qwen3.8-Max 발표에 맞춤) · Apache-2.0 · 98 stars, 4 forks, 15 commits, 4 contributors, 0 release · 외부 실사용 신고 issue 1건(Windows 경로 버그 #3)</p>
+<div class="note">README 원문: "A capability = a <b>skill</b> (so the model knows the tools exist) + an optional <b>MCP server</b> (the tools themselves, launched on demand by <code>uvx</code>)." — architecture 그림에서는 Skill = "the brains", MCP server = "the hands".</div>
+<table>
+<tr><th>Capability</th><th>구성</th><th>Tool 수 (확인치)</th><th>비고</th></tr>
+<tr><td>core</td><td>skill + MCP</td><td>14 (read_image/read_video/visualize + DashScope vision_chat·OCR·grounding·SAM3 segmentation·ASR + Serper web/image search)</td><td>API tool은 DASHSCOPE/SERPER key 필요, native 읽기는 keyless</td></tr>
+<tr><td>video-memory</td><td>skill + MCP</td><td>query tool 9</td><td>4-level graph: Root→SuperEvent→MacroEvent→Subgraph. 30분+ 영상. (발표 시 "scene level" 표현은 부정확 — 실제 계층명은 위와 같음)</td></tr>
+<tr><td>video-edit</td><td>skill + MCP</td><td>생성 tool 5 (qwen_image, qwen_tts, wan_s2v, wan_t2v, happyhorse)</td><td>편집 workflow는 skill이 주도</td></tr>
+<tr><td>blender</td><td>skill + MCP</td><td>22 (공식 표기, 소스와 일치)</td><td>실행 중인 Blender를 thin client로 제어. keyless</td></tr>
+<tr><td>freecad</td><td>skill + MCP</td><td>14 (공식 표기, 소스와 일치)</td><td>XML-RPC. STEP/STL, FEM(CalculiX). keyless</td></tr>
+<tr><td>edu-agent</td><td><b>skill-only</b></td><td>—</td><td>MCP server 없음 확인. hyperframes+Qwen-TTS로 해설 영상 생성</td></tr>
+</table>
+<p><b>지원 harness (공식 문서 확인):</b> marketplace-native — Claude Code, Codex, Qoder, OpenClaw, Qwen Code (<code>.claude-plugin/marketplace.json</code> 방식) · 수동 skill+MCP 등록 — Gemini CLI(installer 자동화), opencode, pi(커뮤니티 pi-mcp-adapter 필요), QwenPaw 2.0.</p>
+<p><b>종속성:</b> DashScope API key가 API형 tool과 video-memory(구축·질의 모두)에 필요. "harness-agnostic"이지만 model-agnostic 주장은 없음 — API tool은 항상 DashScope 경유.</p>
+<p><b>Qwen3.8과의 관계:</b> 저장소에는 Qwen3.8·RL·RecreationBench 언급이 전혀 없음. 순수 inference-time 확장으로 제시됨. "이 plugin으로 RL 학습됐다"는 주장은 어디에도 없다.</p>
+
+<h2 id="g">G · Open questions 전체 목록</h2>
+<h3>RL environment</h3>
+<ol>
+<li>environment reset과 determinism은 어떻게 확보했는가?</li>
+<li>tool version과 dependency를 고정했는가?</li>
+<li>workspace state leakage를 어떻게 방지했는가?</li>
+<li>evaluator script 수정과 reward hacking을 어떻게 막았는가?</li>
+<li>environment failure와 agent failure를 어떻게 구분했는가?</li>
+</ol>
+<h3>Reward</h3>
+<ol start="6">
+<li>task 간 reward scale을 어떻게 normalize했는가?</li>
+<li>binary success와 partial reward를 어떻게 결합했는가?</li>
+<li>model judge와 executable verifier를 어떻게 calibration했는가?</li>
+<li>visual judge의 일관성은?</li>
+<li>invalid action에는 어떤 reward가 주어지는가?</li>
+</ol>
+<h3>Harness</h3>
+<ol start="11">
+<li>harness별 tool schema를 어떻게 normalize했는가?</li>
+<li>context compaction이 long-horizon 성능에 미치는 영향은?</li>
+<li>logs와 artifacts를 external memory로 사용하는가?</li>
+<li>retry policy는 model에 학습됐는가, scaffold에 구현됐는가?</li>
+<li>sub-agent orchestration 비용은?</li>
+<li>harness 자체의 contribution을 분리한 ablation이 있는가?</li>
+</ol>
+<h3>Evaluation</h3>
+<ol start="17">
+<li>동일 model/task에서 harness만 바꾼 통제 실험이 있는가?</li>
+<li>harness별 timeout과 token budget이 같은가?</li>
+<li>avg@N과 best-of-N이 혼재하는가?</li>
+<li>multi-day 사례의 실패율은?</li>
+<li>총 token, GPU, tool execution cost는?</li>
+<li>"human intervention 없음"의 정확한 정의는? (oh-my-cli의 경우: 사람은 governance·harness 규칙만 수정, 제품 코드는 미수정 — repo에서 확인됨)</li>
+<li>environment와 verifier 구축에 들어간 사람의 비용은?</li>
+</ol>
+<h3>Qwen-MM-Plugins</h3>
+<ol start="24">
+<li>native model vision과 plugin tool vision의 routing 기준은?</li>
+<li>dynamic resolution이 실제로 어떤 model/API에서 작동하는가?</li>
+<li>다른 model provider에서도 동일하게 동작하는가?</li>
+<li>visual result를 누가 검증하는가?</li>
+<li>CAD semantic correctness를 어떻게 평가하는가?</li>
+<li>plugin이 커질수록 tool-selection complexity가 증가하지 않는가?</li>
+</ol>
+
+<h2 id="h">H · 예상 질문 10개와 답변 초안</h2>
+<table>
+<tr><th style="width:38%">예상 질문</th><th>답변 초안</th></tr>
+<tr><td>1. 여러 harness에서 성능이 고르다는 게 정말 cross-harness generalization의 증거인가?</td><td>두 해석이 모두 가능하다: (a) harness-invariant한 tool-use policy 학습, (b) 비교된 harness들이 비슷한 affordance(파일 편집, shell, retry)를 공유. 구분하려면 같은 model에 harness만 바꾼 통제 실험과 tool schema 차이가 큰 harness(예: GUI-only)에서의 평가가 필요한데, 둘 다 공개되지 않았다.</td></tr>
+<tr><td>2. Reward hacking은 어떻게 막았나?</td><td>미공개. 일반적 방법은 verifier를 environment 밖(권한 분리)에 두고, agent inspector로 trajectory를 검사하는 것. Qwen이 agent inspection을 reward 스택에 포함한다고 서술한 것이 간접 신호이나 구체 메커니즘은 없다. oh-my-cli의 protected-paths CI가 inference-time 버전의 같은 문제의식을 보여준다.</td></tr>
+<tr><td>3. 500턴이면 context가 넘칠 텐데 어떻게 유지했나?</td><td>공식 상세 미공개. 공개된 사실은 harness가 source·logs·metrics·평가 이력을 파일로 유지했고 model이 이를 재참조했다는 것 — 즉 context 전부가 아니라 workspace가 외부 memory 역할. compaction 정책은 harness 구현에 속하며 미공개.</td></tr>
+<tr><td>4. weight가 안 변하는데 왜 "self-evolution"인가?</td><td>발표에서 구분한 세 유형 중 1(in-context adaptation)·2(artifact evolution)를 가리키는 마케팅 표현으로 읽어야 한다. 3(weight update)은 training pipeline에서만 일어난다. 공개 데모 중 online weight update의 근거는 없다.</td></tr>
+<tr><td>5. 실패율과 비용은? 성공 사례만 보여준 것 아닌가?</td><td>맞는 지적. multi-day 사례의 시도 횟수, 실패율, 총 token/GPU 비용은 모두 미공개다. 성공 사례 선택 편향의 가능성은 열려 있고, 발표에서도 "성공 사례만으로 전체 실패율을 알 수 없다"로 명시했다.</td></tr>
+<tr><td>6. oh-my-cli에서 사람 개입의 정확한 범위는?</td><td>repo에서 직접 확인됨: 사람 maintainer(qqqys, 13 commits)는 .autonomy/·workflow 등 governance만 수정, 제품 코드는 전부 bot commit. agent는 governance 변경을 issue(#498 등)로 제안하고 사람이 구현. "제품 개발 무개입, 규칙 관리는 사람"이 정확한 서술.</td></tr>
+<tr><td>7. Nangate45 결과가 실제 공정에서 의미가 있나?</td><td>직접적 의미는 제한적 — 공개 45nm 교육용 라이브러리이고 sign-off/DRC/DFM이 없다. 의미는 "폐루프에서 agent가 물리 metric까지 최적화했다"는 workflow 구조의 실증이지, IP의 production 가치가 아니다.</td></tr>
+<tr><td>8. 500턴짜리 trajectory에서 credit assignment는 어떻게 하나?</td><td>미공개. 공개 사례 자체는 RL 학습이 아니라 inference run이므로 credit assignment 문제가 없다. training에서 이런 길이의 trajectory를 쓴다면 turn-level advantage 추정이 필요한데, Qwen은 algorithm을 공개하지 않았다.</td></tr>
+<tr><td>9. Qwen-MM-Plugins는 다른 모델에서도 쓸 만한가?</td><td>구조상 harness-agnostic(Claude Code·Codex 등 9개 harness 지원)이지만, API형 tool(OCR·segmentation·생성)과 video-memory는 DashScope key가 필수다. Blender/FreeCAD·native 읽기는 keyless. 타 모델에서의 성능 데이터는 없다.</td></tr>
+<tr><td>10. 그래서 우리가 얻을 교훈은 무엇인가?</td><td>이 발표는 특정 도입안을 제안하지 않는다. 시스템적 교훈만 남긴다: 어떤 업무를 agent에 맡길 수 있는지는 "그 업무를 rollout·reward 가능한 environment로 만들 수 있는가"에 달려 있고, 그 environment(workspace·toolchain·verifier·reset)가 모델만큼 중요한 자산이 된다는 것.</td></tr>
+</table>
+
+<h2 id="i">I · 사실 검증이 끝나지 않은 항목</h2>
+<ul>
+<li>Qwen 논문 재현 사례의 <b>독립 재현</b>(제3자) — 미확인</li>
+<li>칩 trajectory의 turn별 수치 — Qwen 공식 서술 외 원 artifact(로그) 접근 불가 시 Level 1에 머무름</li>
+<li>Qwen RL training의 algorithm·rollout 수·harness별 비율 — 미공개</li>
+<li>Jalapeño에서 AI가 담당한 설계 범위 — "parts of the design and optimization process" 한 구절 이상 미공개, technical report 대기</li>
+<li>Jalapeño 최종 성능 — 측정 진행 중(공식)</li>
+<li>Qwen-MM-Plugins의 제3자 채택·production 사용 — 9일 된 저장소, 외부 bug report 1건 수준</li>
+<li>RecreationBench — in-house 벤치마크로 공개 repo 없음</li>
+<li>oh-my-cli 8월 활동(일 52–87 commits)이 발표된 "16일 run"과 같은 조건인지 — 저장소만으로 불명</li>
+</ul>
+
+<h2 id="j">J · 원본 캡처 (전체 크기)</h2>
+<h3>Anthropic — Research Engineer, Chip Design RL</h3>
+<img class="shot" src="assets/anthropic/job-posting-full.png" alt="Anthropic 채용공고 전체 캡처">
+<p><a href="https://job-boards.greenhouse.io/anthropic/jobs/5231612008">원본 링크</a> · 2026-08-07 캡처 · Code RL team, SF/NYC, $500K–$850K</p>
+<h3>oh-my-cli — Issue #546 (전체 agent lifecycle)</h3>
+<img class="shot" src="assets/oh-my-cli/issue-546.png" alt="oh-my-cli Issue 546">
+<p><a href="https://github.com/qwen-code-dev-bot/oh-my-cli/issues/546">원본 링크</a> · auto-triage → lease → 구현 → tmux E2E → CI 실패 감지·수정(b7ce6de) → lease 해제, 약 53분</p>
+<h3>oh-my-cli — PR #547 (code + test + CI)</h3>
+<img class="shot" src="assets/oh-my-cli/pr-547.png" alt="oh-my-cli PR 547">
+<p><a href="https://github.com/qwen-code-dev-bot/oh-my-cli/pull/547">원본 링크</a> · +486 lines / 8 files (테스트 325 lines 포함) · verify/protected-paths 통과</p>
+</main>
+</body>
+</html>

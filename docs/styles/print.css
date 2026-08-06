@@ -1,0 +1,19 @@
+/* Print / PDF: one slide per landscape page, no chrome, no scaling */
+@page { size: 338.7mm 190.5mm; margin: 0; }
+
+@media print {
+  html, body { overflow: visible; background: #fff; }
+  #hud, #progress, #help, #toc, #notesPanel { display: none !important; }
+  #stage { position: static; display: block; }
+  .slide {
+    display: flex !important;
+    position: static;
+    transform: none !important;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: page;
+  }
+  video, iframe { display: none; }
+  .media-fallback, .print-fallback { display: block !important; }
+  a { color: var(--blue); }
+}
