@@ -674,8 +674,10 @@
   <div class="slide-body">
     <div class="cols">
       <div style="flex:1.1">
-        <p style="font-size:17px; margin-bottom:12px">Qwen3.8이 <strong>model을 environment에 맞춰 RL 학습</strong>시키는 접근이라면,
-        이 프로젝트는 model weight를 건드리지 않고 <strong>long-horizon 실행을 세 역할로 분해한 harness</strong>다 — Manage–Execute–Audit loop.</p>
+        <p style="font-size:16.5px; margin-bottom:12px">Qwen을 만드는 <strong>Alibaba의 다른 팀</strong>(AMAP-ML · DreamX Team)이
+        2026-08-03 공개한 논문·프레임워크 — <strong>나흘 만에 330 stars</strong>.
+        Qwen3.8이 model을 environment에 맞춰 RL 학습시키는 접근이라면, 이쪽은 model weight를 건드리지 않고
+        <strong>long-horizon 실행을 세 역할로 분해한 harness</strong>다 — Manage–Execute–Audit loop.</p>
         <div class="card" style="border-left:4px solid var(--blue); margin-bottom:10px; padding:12px 18px">
           <h3 style="margin-bottom:4px">Manager</h3>
           <p style="font-size:16px">원래 목표·<strong>검증된</strong> 진행 상태·다음 단계를 유지하고 subtask를 선택</p>
@@ -691,15 +693,17 @@
       </div>
       <div>
         <h3>같은 model, harness만 교체했을 때</h3>
-        <table style="font-size:16.5px">
-          <tr><th>Benchmark</th><th>기본 실행</th><th>MEA harness</th></tr>
-          <tr><td>WeaveBench (114 tasks)</td><td>51.8%</td><td><strong>80.7%</strong> (+28.9)</td></tr>
-          <tr><td>Terminal-Bench 2.1</td><td>69.7%</td><td><strong>77.2%</strong></td></tr>
-          <tr><td>OSWorld 2.0</td><td>2.8%</td><td><strong>8.3%</strong> (3×)</td></tr>
-          <tr><td>OSWorld 2.0 (Opus 4.7)</td><td>20.0%</td><td><strong>34.3%</strong></td></tr>
+        <table style="font-size:15.5px">
+          <tr><th>Benchmark</th><th>Model</th><th>기본 harness</th><th>MEA</th></tr>
+          <tr><td rowspan="2">WeaveBench (114)</td><td>Qwen3.7-Plus</td><td>51.8 (Claude Code)</td><td><strong>80.7</strong></td></tr>
+          <tr><td>Opus 4.7</td><td>41.2 (Claude Code) · 35.1 (OpenClaw)</td><td>—</td></tr>
+          <tr><td>Terminal-Bench 2.1</td><td>Qwen3.7-Plus</td><td>69.7</td><td><strong>77.2</strong></td></tr>
+          <tr><td rowspan="2">OSWorld 2.0 (108)</td><td>Qwen3.7-Plus</td><td>2.8</td><td><strong>8.3</strong></td></tr>
+          <tr><td>Opus 4.7</td><td>13.9</td><td><strong>35.3</strong></td></tr>
         </table>
-        <p style="font-size:14px; color:var(--ink-soft); margin-top:6px">위 3행은 Qwen3.7-Plus 기준 (논문 수치). backend-agnostic — Claude Code·Codex 등을 AgentAdapter로 교체 장착</p>
-        <p style="font-size:16.5px; margin-top:14px">Auditor는 곧 <strong>inference-time verifier</strong>다 — 검증 가능한 feedback loop라는 같은 구조를, RL 없이 harness 설계만으로 세운 사례.</p>
+        <p style="font-size:13.5px; color:var(--ink-soft); margin-top:6px">논문·프로젝트 페이지 자체 평가 수치. backend-agnostic — Claude Code·Codex를 AgentAdapter로 장착</p>
+        <p style="font-size:16px; margin-top:10px">WeaveBench에서 <strong>Qwen3.7-Plus + MEA(80.7)가 Opus 4.7 + Claude Code(41.2)를 역전</strong> —
+        harness 설계가 model 격차를 뒤집은 사례. Auditor는 곧 <strong>inference-time verifier</strong>다.</p>
       </div>
     </div>
   </div>
@@ -707,7 +711,40 @@
   <aside class="notes">
     <p><b>1분.</b> 위치가 중요: Qwen3.8과 "다른" 프로젝트지만 결론이 같다 — long-horizon capability는 시스템 속성이라는 것. Qwen은 training(RL environment) 쪽에서, 이쪽은 inference harness 쪽에서 같은 지점에 도달.</p>
     <p>구두 포인트: "executor를 매번 fresh하게"가 핵심 설계 — 긴 context에 오류가 누적되는 대신, 상태는 Manager의 검증된 task state 파일에만 산다. oh-my-cli의 lease·상태 기계와 정확히 같은 문제의식. Auditor가 검증한 것만 상태에 들어간다는 규칙은 universal reward system의 inference-time 버전.</p>
-    <p>수치 주의: 논문 자체 평가이며(독립 재현 미확인), OSWorld 2.0은 절대값이 낮은(2.8→8.3%) 어려운 벤치마크라 배율이 커 보이는 것.</p>
+    <p>수치 주의: 논문 자체 평가이며(독립 재현 미확인), OSWorld 2.0은 절대값이 낮은(2.8→8.3%) 어려운 벤치마크라 배율이 커 보이는 것. Opus 4.7 OSWorld 수치는 출처 간 표기가 갈림 — abstract는 subset 기준 20.0→34.3, 프로젝트 페이지 표는 13.9→35.3(binary)·49.1→66.9(partial). 슬라이드에는 프로젝트 페이지 표를 실었고, 질문이 오면 "subset·metric 정의 차이"로 설명.</p>
+  </aside>
+</section>
+
+<!-- ═══════════ LongHorizon-Harness 직접 실행 ═══════════ -->
+<section class="slide" data-title="LongHorizon-Harness — 직접 실행해 본 결과">
+  <div class="kicker">Hands-on — 발표자 직접 실행, 2026-08-07</div>
+  <h2>명령 한 줄로 재현되는 Manage–Execute–Audit loop</h2>
+  <div class="slide-body">
+    <figure style="margin-bottom:8px">
+      <img src="assets/lh-harness/cli-run.jpg" alt="lh-harness run 명령 실행 화면" style="max-height:118px; width:auto">
+      <figcaption style="font-size:12.5px"><code>lh-harness run --task @task.md --dashboard --agent claude_code --model sonnet</code> — task 파일 하나로 시작, run별 workspace·log 자동 생성</figcaption>
+    </figure>
+    <div class="cols" style="min-height:0">
+      <div style="flex:1.5; min-width:0">
+        <figure style="height:100%; display:flex; flex-direction:column; justify-content:flex-start">
+          <img src="assets/lh-harness/dashboard.png" alt="LongHorizon-Harness 실시간 dashboard" style="max-height:255px; object-fit:contain">
+          <figcaption style="font-size:12.5px">실시간 dashboard — task: "빈 디렉터리에서 AI 뉴스 큐레이션 웹앱 만들기" (Claude Code + Sonnet 5)</figcaption>
+        </figure>
+      </div>
+      <div>
+        <h3 style="font-size:19px">화면에서 보이는 것</h3>
+        <ul style="font-size:15px">
+          <li><strong>Auditor의 tool call들</strong> — 디렉터리 트리·toolchain 버전·package.json 유효성을 실측 검사</li>
+          <li>판정 <code>Integrity: clean · Contract audit: aligned</code> — 통과한 것만 task state로</li>
+          <li>Round 2의 <strong>Manager</strong>가 다음 subtask 계획 — Executor는 매 라운드 fresh context</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="src">발표자 로컬 실행 캡처 (macOS · Claude Code backend · claude-sonnet-5) · <a href="https://github.com/AMAP-ML/LongHorizon-Harness">github.com/AMAP-ML/LongHorizon-Harness</a></span><span class="pagenum">18</span></div>
+  <aside class="notes">
+    <p><b>1분.</b> 이 슬라이드의 힘: 논문 수치는 자체 평가지만, 이 화면은 발표자가 직접 재현한 것 — 설치부터 실행까지 명령 한 줄이었다는 점.</p>
+    <p>구두 연결: 대시보드의 audit 판정 문구가 앞 슬라이드의 "검증 통과한 것만 상태에 기록"의 실물. oh-my-cli(사례 1)의 lease·CI와 같은 문제의식이 다른 팀의 다른 구현으로 또 나타난다 — long-horizon의 공통 인프라 패턴이 수렴하고 있다는 신호.</p>
   </aside>
 </section>
 

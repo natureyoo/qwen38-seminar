@@ -32,10 +32,11 @@
 | 14 | MM-Plugins 구조 | capability = skill + MCP server, harness 확장 레이어 | README·소스 확인 (L2) | 1.5 |
 | 15 | MM-Plugins 평가 | 잠재력 크지만 채택·안정성 미검증 | repo stats (L2) + 발표자 평가 | 1.5 |
 | 16 | 공통 loop | 세 사례 = 같은 구조의 다른 instantiation | 발표자 종합 | 1.0 |
-| 17 | LongHorizon-Harness | model 고정·harness만으로 long-horizon 개선 (MEA loop) | 논문·repo (자체 평가) | 1.0 |
-| 18 | 결론 | 시스템적 가설이 핵심 | 발표자 해석 | 1.0 |
+| 17 | LongHorizon-Harness | Alibaba 타 팀의 MEA loop — harness만으로 Opus+Claude Code 역전 | 논문·프로젝트 페이지 (자체 평가) | 1.0 |
+| 18 | LH-Harness 직접 실행 | 명령 한 줄로 재현한 MEA loop 실황 | 발표자 로컬 실행 캡처 | 1.0 |
+| 19 | 결론 | 시스템적 가설이 핵심 | 발표자 해석 | 1.0 |
 
-**합계: 24.0분** (+ Q&A 5분, 여유 1분). 상세 구술 노트는 `docs/index.html` 각 슬라이드의 `<aside class="notes">` 참조 — 발표 중 `n` 키.
+**합계: 25.0분** (+ Q&A 5분). 상세 구술 노트는 `docs/index.html` 각 슬라이드의 `<aside class="notes">` 참조 — 발표 중 `n` 키.
 
 ## 시간 초과 시 단축 우선순위
 
