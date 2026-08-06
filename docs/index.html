@@ -732,19 +732,25 @@
         </figure>
       </div>
       <div>
-        <h3 style="font-size:19px">화면에서 보이는 것</h3>
-        <ul style="font-size:15px">
-          <li><strong>Auditor의 tool call들</strong> — 디렉터리 트리·toolchain 버전·package.json 유효성을 실측 검사</li>
-          <li>판정 <code>Integrity: clean · Contract audit: aligned</code> — 통과한 것만 task state로</li>
-          <li>Round 2의 <strong>Manager</strong>가 다음 subtask 계획 — Executor는 매 라운드 fresh context</li>
+        <h3 style="font-size:18px">화면에서 보이는 것</h3>
+        <ul style="font-size:14px; line-height:1.4">
+          <li><strong>Auditor의 tool call들</strong> — 디렉터리·toolchain·package.json을 실측 검사</li>
+          <li>판정 <code>Integrity: clean</code> — 통과한 것만 task state로</li>
+          <li>Executor는 매 라운드 fresh context</li>
         </ul>
+        <div class="card" style="margin-top:8px; padding:9px 14px; border-left:4px solid var(--teal)">
+          <p style="font-size:13.5px; margin-bottom:2px"><strong>결과물 직접 보기</strong> — 15 라운드·92 테스트 통과 후 산출된 앱</p>
+          <p style="font-size:15px"><a href="https://natureyoo.github.io/qwen38-seminar/demo/" target="_blank"><strong>natureyoo.github.io/qwen38-seminar/demo/</strong></a></p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="footer"><span class="src">발표자 로컬 실행 캡처 (macOS · Claude Code backend · claude-sonnet-5) · <a href="https://github.com/AMAP-ML/LongHorizon-Harness">github.com/AMAP-ML/LongHorizon-Harness</a></span><span class="pagenum">18</span></div>
+  <div class="footer"><span class="src">발표자 로컬 실행 캡처 (macOS · Claude Code backend · claude-sonnet-5) · <a href="https://github.com/AMAP-ML/LongHorizon-Harness">github.com/AMAP-ML/LongHorizon-Harness</a> · 데모: <a href="https://natureyoo.github.io/qwen38-seminar/demo/">정적 스냅샷 배포</a></span><span class="pagenum">18</span></div>
   <aside class="notes">
     <p><b>1분.</b> 이 슬라이드의 힘: 논문 수치는 자체 평가지만, 이 화면은 발표자가 직접 재현한 것 — 설치부터 실행까지 명령 한 줄이었다는 점.</p>
     <p>구두 연결: 대시보드의 audit 판정 문구가 앞 슬라이드의 "검증 통과한 것만 상태에 기록"의 실물. oh-my-cli(사례 1)의 lease·CI와 같은 문제의식이 다른 팀의 다른 구현으로 또 나타난다 — long-horizon의 공통 인프라 패턴이 수렴하고 있다는 신호.</p>
+    <p>데모 링크를 열어 보여줄 때(선택): 앱은 Node 서버라 Pages에서 그대로 못 돌리므로 API 응답을 정적 JSON으로 스냅샷했고, fetch를 가로채는 shim이 응답한다 — 프론트엔드 코드는 원본 그대로다. 정렬·필터·상세 뷰 모두 동작하며 재수집만 안 된다.</p>
+    <p>정직한 후일담(A/B 결과는 구두로): 같은 task를 harness 없이 Sonnet 5 단독으로도 시켜봤는데 결과물이 비슷했다. output 토큰은 MEA가 3.6배(721K vs 203K). 이 크기의 task에서는 harness 이득이 안 나온다는 뜻 — 논문이 개선을 보인 벤치마크가 전부 long-horizon인 이유. 더 중요한 건, 15라운드 audit이 통과시킨 앱의 실제 결함이 "랭킹이 유용하지 않다"였고 그건 rubric에 없어서 아무도 못 잡았다는 점. 발표자가 제품을 열어보고 5분 만에 진단했고(회사 블로그만 수집 + 검증 규칙이 독립 2소스 요구 → 구조적 모순, fixture가 실데이터를 밀어냄), 고치는 데는 어댑터 2개였다. verifier가 커버하지 않는 품질 축은 loop를 아무리 돌려도 올라가지 않는다.</p>
   </aside>
 </section>
 
