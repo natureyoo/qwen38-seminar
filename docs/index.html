@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Qwen3.8 — 모델 점수를 넘어: Agent 업무 범위와 자율 실행 시간의 확장</title>
+<title>Qwen3.8: Agent 업무 범위와 자율 실행 시간의 확장</title>
 <link rel="stylesheet" href="styles/deck.css">
 <link rel="stylesheet" href="styles/print.css">
 </head>
@@ -20,12 +20,11 @@
 <!-- ═══════════ 1. 오프닝 ═══════════ -->
 <section class="slide" data-title="오프닝 — 모델인가, 시스템인가">
   <div class="slide-body center">
-    <div class="kicker">Samsung Electronics · Internal AI Seminar · 2026-08</div>
-    <h1 style="font-size:60px; max-width:1050px">더 똑똑한 모델인가,<br>더 오래 일을 맡길 수 있는 <span style="color:var(--blue)">시스템</span>인가?</h1>
-    <p style="margin-top:28px; font-size:24px; color:var(--ink-soft)">
-      Qwen3.8 — 모델 점수를 넘어, Agent가 수행하는 업무 범위와<br>자율 실행 시간(autonomous execution horizon)의 확장
+    <div class="kicker">2026-08</div>
+    <h1 style="font-size:50px; max-width:1050px">Qwen3.8: Agent 업무 범위와<br>자율 실행 시간의 확장</h1>
+    <p style="margin-top:26px; font-size:20px; color:var(--ink-soft)">
+      Qwen3.8-Max 발표를 agentic RL과 harness 관점에서 읽기
     </p>
-    <p style="margin-top:34px; font-size:17px; color:var(--ink-soft)">25분 발표 + 5분 Q&amp;A · 발표자 해석은 <span class="ev l4" style="vertical-align:0">해석</span> 배지로 구분</p>
   </div>
   <div class="footer">
     <span class="src">1차 출처: qwen.ai/blog?id=qwen3.8 · github.com/qwen-code-dev-bot/oh-my-cli · github.com/QwenLM/Qwen-MM-Plugins · openai.com · anthropic (greenhouse)</span>
@@ -80,50 +79,46 @@
 </section>
 
 <!-- ═══════════ 3. 3층 분해 ═══════════ -->
-<section class="slide" data-title="Model vs Harness vs RL Environment">
-  <div class="kicker">Decomposition</div>
-  <h2>"Qwen3.8의 기능"이라고 뭉뚱그리면 안 되는 세 개의 층</h2>
+<section class="slide" data-title="무엇이 바뀌었나 — architecture가 아니라 environment">
+  <div class="kicker">What actually changed</div>
+  <h2>아키텍처는 Qwen3.5 그대로 — 바뀐 것은 RL environment다</h2>
   <div class="slide-body">
     <div class="cols" style="gap:22px">
-      <div class="card" style="border-top:4px solid var(--blue)">
-        <h3>Layer 1 — Model</h3>
+      <div class="card" style="border-top:4px solid var(--line)">
+        <h3 style="color:var(--ink-soft)">Model architecture — 새것 없음</h3>
         <ul style="font-size:18px">
-          <li>Qwen3.8-Max weight (policy)</li>
-          <li>reasoning · tool selection</li>
-          <li>observation → next action 생성</li>
-          <li>post-training으로 각인된 행동 특성</li>
+          <li>"Built upon the architectural foundation of Qwen 3.5" <span class="ev l1">공식</span></li>
+          <li>2.4T params (95B active)로 scale</li>
+          <li>새 아키텍처 요소 발표 없음 · tech report 없음</li>
         </ul>
       </div>
-      <div class="card" style="border-top:4px solid var(--teal)">
-        <h3>Layer 2 — Inference-time harness</h3>
+      <div class="card" style="border-top:4px solid var(--blue)">
+        <h3>Post-training — RL environment 다양화</h3>
         <ul style="font-size:18px">
-          <li>system prompt · tool schema</li>
-          <li>context packing / compaction</li>
-          <li>planning loop · retry · recovery</li>
-          <li>sub-agent · skills · memory/state</li>
-          <li>sandbox · permission · budget</li>
+          <li>Task × Workspace × Harness 조합 확장</li>
+          <li>universal reward · 4축 online balancer</li>
+          <li>학습 환경 = Claude Code·Codex 등 <strong>실제 inference harness</strong> 그 자체</li>
         </ul>
       </div>
       <div class="card" style="border-top:4px solid var(--amber)">
-        <h3>Layer 3 — RL/eval environment</h3>
+        <h3>발표 방식 — 극한 use case 시연</h3>
         <ul style="font-size:18px">
-          <li>task sampler · initial workspace</li>
-          <li>harness config · executable tools</li>
-          <li>verifier · rubric · reward</li>
-          <li>termination · trajectory 수집</li>
-          <li>online balancing · learner · weight update</li>
+          <li>16일 자율 소프트웨어 운영 (oh-my-cli)</li>
+          <li>125시간 논문 재현·개선</li>
+          <li>500-turn 칩 설계</li>
         </ul>
       </div>
     </div>
-    <div class="claim" style="margin-top:8px">
-      Qwen은 Layer 3을 "real-world RL environment를 RL compute와 함께 확장했다"고 서술한다 —
-      environment가 모델만큼 중요한 학습 자산이라는 입장.
+    <div class="interp" style="margin-top:8px">
+      이 RL 학습의 목적은 결국 <strong>inference-time harness를 잘 쓰는 모델</strong>을 만드는 것이다.
+      Qwen3.8의 새로움은 model architecture가 아니라, 얼마나 다양한 environment에서 RL을 돌렸는가와
+      그 결과를 얼마나 긴 자율 실행으로 보여주는가에 있다.
     </div>
   </div>
-  <div class="footer"><span class="src">구분 기준: Qwen3.8 blog 서술 구조 + 발표자 정리</span><span class="pagenum">03</span></div>
+  <div class="footer"><span class="src">"Built upon the architectural foundation of Qwen 3.5, Qwen 3.8-Max scales to 2.4 trillion parameters" — Qwen3.8 blog</span><span class="pagenum">03</span></div>
   <aside class="notes">
-    <p><b>2분.</b> 오늘 발표 전체의 좌표계. 이후 모든 슬라이드에서 "이건 어느 층 이야기인가"를 계속 묻는다.</p>
-    <p>핵심 포인트: Layer 2는 발표 당일 우리가 쓰는 Claude Code/Codex와 같은 것. Layer 3은 그 harness를 학습용으로 감싼 것 — 같은 harness가 두 층에서 다른 역할을 한다.</p>
+    <p><b>2분.</b> 발표 전체의 프레임을 여기서 세운다: 이번 릴리스에서 모델 쪽의 새로움은 없다(공식적으로 Qwen3.5 아키텍처 기반, 신규 아키텍처 발표 없음). 새로움은 post-training의 RL environment 다양화이고, 그 목적은 inference-time harness 사용 능력이다.</p>
+    <p>포인트: 학습에 쓰인 harness(Claude Code, Codex 등)가 곧 사용자가 실제로 쓰는 harness다 — training environment와 inference environment가 같은 물건이라는 것이 이 접근의 핵심. 이후 슬라이드(4: 두 loop, 5–7: environment 확장 방법, 9–13: 극한 use case)가 이 세 칸을 각각 전개한다.</p>
   </aside>
 </section>
 
