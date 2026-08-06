@@ -62,6 +62,10 @@
     v.addEventListener('error', () => v.classList.add('failed'), true);
   });
 
+  // auto-number footers so slides can be added/removed freely
+  slides.forEach((el, i) => el.querySelectorAll('.pagenum')
+    .forEach(p => { p.textContent = String(i + 1).padStart(2, '0'); }));
+
   buildToc();
   scale();
   const m = location.hash.match(/#\/(\d+)/);

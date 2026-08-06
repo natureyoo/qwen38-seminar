@@ -162,7 +162,7 @@
   <div class="footer"><span class="src">loop 구조: Qwen3.8 blog 서술 기반 발표자 재구성</span><span class="pagenum">04</span></div>
   <aside class="notes">
     <p><b>2분.</b> 두 loop의 앞부분은 동형(model→tool→env→verifier)이고, 차이는 꼬리(reward→learner→weight update)에만 있다는 점을 강조. 그래서 같은 harness를 양쪽에 재사용할 수 있고, 그것이 Qwen 전략의 핵심.</p>
-    <p>여기서 "self-evolution" 용어 혼동을 예방하는 밑작업을 한다 — 8번 슬라이드에서 회수.</p>
+    <p>용어 주의(질문 대비): Qwen 원문의 "self-evolution"·"continuous learning"은 사례별로 (a) context 안에서 다음 action을 바꾸는 in-context adaptation(칩 500-turn, E-commerce 2,000 rounds), 또는 (b) code·workflow 같은 외부 artifact 수정(oh-my-cli)을 가리킨다. 실행 중 weight update는 어느 사례에도 없다 — weight가 바뀌는 것은 training pipeline의 learner뿐.</p>
   </aside>
 </section>
 
@@ -311,41 +311,7 @@
   </aside>
 </section>
 
-<!-- ═══════════ 8. Self-evolution 3가지 의미 ═══════════ -->
-<section class="slide" data-title="Self-evolution의 세 가지 의미">
-  <div class="kicker">Disambiguation</div>
-  <h2>"Self-evolution"이라는 말이 가리킬 수 있는 세 가지</h2>
-  <div class="slide-body">
-    <div class="cols" style="gap:22px">
-      <div class="card" style="border-top:4px solid var(--teal)">
-        <h3>1 · Within-episode adaptation</h3>
-        <p style="font-size:18px">현재 context 안에서 이전 실패·로그를 보고 다음 action을 바꾼다.</p>
-        <p style="font-size:16px; color:var(--ink-soft); margin-top:6px">weight 불변 · <b>칩 설계 500-turn이 여기</b></p>
-      </div>
-      <div class="card" style="border-top:4px solid var(--blue)">
-        <h3>2 · Artifact/harness evolution</h3>
-        <p style="font-size:18px">agent가 code·test·prompt·workflow·harness 자체를 수정한다.</p>
-        <p style="font-size:16px; color:var(--ink-soft); margin-top:6px">외부 artifact 변화 · weight 불변 · <b>oh-my-cli가 여기</b></p>
-      </div>
-      <div class="card" style="border-top:4px solid var(--amber)">
-        <h3>3 · Between-run RL learning</h3>
-        <p style="font-size:18px">여러 rollout의 reward로 learner가 weight를 업데이트한다.</p>
-        <p style="font-size:16px; color:var(--ink-soft); margin-top:6px"><b>training pipeline에서만</b> 일어난다</p>
-      </div>
-    </div>
-    <div class="warn" style="font-size:18px">
-      공개 데모 실행 중에 model weight가 온라인으로 업데이트됐다는 근거는 없다.
-      마케팅 문구의 "continuous learning"이 셋 중 무엇인지 항상 되물어야 한다.
-    </div>
-  </div>
-  <div class="footer"><span class="src">분류: 발표자 정리 · Qwen 원문 용례 대조는 sources 페이지</span><span class="pagenum">08</span></div>
-  <aside class="notes">
-    <p><b>1분.</b> 빠르게. 앞 슬라이드(4)의 밑작업 회수. 세 사례가 각각 어디에 속하는지 지도만 그려주고 다음으로.</p>
-    <p>원문 용례 분류(질문 대비): "self-evolving harness"(oh-my-cli)=유형 2 · "self-improving research loop"(논문)=유형 1+2 · E-Commerce Bench의 "continuous learning capability"(2,000+ rounds 협상 적응)=유형 1 — weight update 아님. "Continuous Learning in Long-term Operations"라는 공식 섹션 제목 자체가 유형 1을 가리키는 마케팅 표현의 예.</p>
-  </aside>
-</section>
-
-<!-- ═══════════ 9. oh-my-cli ═══════════ -->
+<!-- ═══════════ oh-my-cli ═══════════ -->
 <section class="slide" data-title="사례 1 — oh-my-cli">
   <div class="kicker">Case 1 · Long-running software maintenance</div>
   <h2>oh-my-cli — 프로젝트와 harness의 동시 진화</h2>
@@ -393,7 +359,7 @@
   <aside class="notes">
     <p><b>2분.</b> "Qwen이 CLI를 만들었다"로 축약하지 않기. 상태 전이 label(agent-ready→active→blocked/failed)이 곧 스케줄러이자 lease 기반 동시성 제어.</p>
     <p>대표 artifact 구두 소개: <b>Issue #546</b> — auto-triage→lease→구현→tmux E2E 영수증→CI 실패 감지 후 b7ce6de로 수정→lease 해제까지 약 53분의 전체 lifecycle이 코멘트에 남아 있음. <b>PR #710</b> — merge 후 dogfooding 중 직전 PR #709가 만든 verifier 버그를 스스로 발견·수정한 recovery 사례.</p>
-    <p>정직한 단서: 사람 maintainer(qqqys, 13 commits)는 governance만 담당, 제품 코드는 bot(663 commits)만 작성. 발전한 것은 artifact이지 model weight가 아니다(slide 8 유형 2). "16일"은 7/13–7/29 구간(활동일 ~14일)과 부합.</p>
+    <p>정직한 단서: 사람 maintainer(qqqys, 13 commits)는 governance만 담당, 제품 코드는 bot(663 commits)만 작성. "self-evolving harness"라는 공식 표현에서 발전한 것은 code·workflow 같은 외부 artifact이지 model weight가 아니다. "16일"은 7/13–7/29 구간(활동일 ~14일)과 부합.</p>
   </aside>
 </section>
 
@@ -527,7 +493,7 @@
   <div class="footer"><span class="src">Qwen3.8 blog — chip trajectory (500 turns · 71 evals). "reward"가 아니라 verifier/evaluation signal — RL reward formula는 미공개</span><span class="pagenum">12</span></div>
   <aside class="notes">
     <p><b>2분.</b> 그래프에서 왼쪽 절벽(turn 22)을 가리키며: 원문 표현 그대로 "slashing 6,288 gates in one move — accounting for over 80% of the total area reduction". hill-climbing이 아니라 설계 공간의 구조를 이해한 rewrite. 이후 단계 상세: REDUCE stage bypass·k_ff 축소(35–48), base/mod register 제거·even-number early-exit·MSB comparator(60–113), multiplier를 modexp FSM에 inline·전역 subtractor 공유(170–252), NOR-tree 공유·abs-sub 분리(443–500).</p>
-    <p>이 run은 slide 8의 유형 1(within-episode adaptation) — weight는 변하지 않았다.</p>
+    <p>이 run은 하나의 episode 안에서 일어난 in-context adaptation — weight는 변하지 않았다.</p>
   </aside>
 </section>
 
