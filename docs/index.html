@@ -32,7 +32,7 @@
   </div>
   <aside class="notes">
     <p><b>1분.</b> 훅: "Qwen3.8 발표에서 benchmark 표보다 오래 기억에 남는 건, 16일 동안 사람 개입 없이 CLI 제품을 유지보수한 저장소와 500턴짜리 칩 설계 trajectory다."</p>
-    <p>오늘 발표는 리뷰가 아니라 해석이다: 이 발표가 agentic RL과 harness 관점에서 무엇을 의미하는가. 공식 주장과 발표자 해석을 색으로 구분해 두었다(파랑=Qwen 공식, 주황=해석).</p>
+    <p>오늘 발표는 리뷰가 아니라 해석이다: 이 발표가 agentic RL과 harness 관점에서 무엇을 의미하는가. 공식 주장 인용은 파란 인용 박스로 표시했고, 해석은 구두로 전달한다.</p>
   </aside>
 </section>
 
@@ -54,27 +54,24 @@
       <div>
         <h3>Qwen3.8 발표의 서사</h3>
         <ul>
-          <li>16일 자율 운영된 실제 GitHub 프로젝트 <span class="ev l2">repo 확인</span></li>
-          <li>125시간 논문 재현·개선 run <span class="ev l1">공식 주장</span></li>
-          <li>500-turn 칩 설계 trajectory <span class="ev l1">공식 주장</span></li>
+          <li>16일 자율 운영된 실제 GitHub 프로젝트</li>
+          <li>125시간 논문 재현·개선 run</li>
+          <li>500-turn 칩 설계 trajectory</li>
           <li>RL environment scaling 방법론 자체를 서술</li>
         </ul>
       </div>
     </div>
     <div class="card" style="font-size:15.5px; padding:10px 18px; margin-bottom:10px">
-      <strong>Model 기본 사항</strong> — Qwen3.8-Max: 2.4T params (95B active) <span class="ev l1">공식</span> ·
+      <strong>Model 기본 사항</strong> — Qwen3.8-Max: 2.4T params (95B active) ·
       Qwen-Max급 최초 open weights ("next week" 예고, 발표 시점 미공개) · 1M context는 본문이 아닌
       Codex/OpenClaw config snippet에서만 확인 · tech report/model card 없음 (2026-08-07 기준)
-    </div>
-    <div class="interp">
-      Frontier 경쟁이 "답변 품질"에서 "검증 가능한 feedback loop 안에서 얼마나 복잡한 일을
-      얼마나 오래 자율적으로 끝내는가"로 확장되고 있다.
     </div>
   </div>
   <div class="footer"><span class="src">"Qwen3.8-Max: A New Bar for Coding and Cowork" — qwen.ai/blog?id=qwen3.8, 2026-08-03 발표, 2026-08-07 열람</span><span class="pagenum">02</span></div>
   <aside class="notes">
     <p><b>1.5분.</b> 청중이 이미 아는 것(벤치마크 릴리스의 전형적 구조)은 왼쪽 열로 한 문장에 처리. 오른쪽 열의 세 사례가 오늘 발표의 뼈대라고 예고.</p>
-    <p>주의: "Qwen3.8이 최고 모델"이라는 주장을 하려는 게 아님을 명시. 증거 수준 배지 체계(공식 주장/repo 확인/해석)를 여기서 소개.</p>
+    <p>주의: "Qwen3.8이 최고 모델"이라는 주장을 하려는 게 아님을 명시.</p>
+    <p>구두 해석: Frontier 경쟁이 "답변 품질"에서 "검증 가능한 feedback loop 안에서 얼마나 복잡한 일을 얼마나 오래 자율적으로 끝내는가"로 확장되고 있다.</p>
   </aside>
 </section>
 
@@ -87,7 +84,7 @@
       <div class="card" style="border-top:4px solid var(--line)">
         <h3 style="color:var(--ink-soft)">Model architecture — 새것 없음</h3>
         <ul style="font-size:18px">
-          <li>"Built upon the architectural foundation of Qwen 3.5" <span class="ev l1">공식</span></li>
+          <li>"Built upon the architectural foundation of Qwen 3.5"</li>
           <li>2.4T params (95B active)로 scale</li>
           <li>새 아키텍처 요소 발표 없음 · tech report 없음</li>
         </ul>
@@ -108,11 +105,6 @@
           <li>500-turn 칩 설계</li>
         </ul>
       </div>
-    </div>
-    <div class="interp" style="margin-top:8px">
-      이 RL 학습의 목적은 결국 <strong>inference-time harness를 잘 쓰는 모델</strong>을 만드는 것이다.
-      Qwen3.8의 새로움은 model architecture가 아니라, 얼마나 다양한 environment에서 RL을 돌렸는가와
-      그 결과를 얼마나 긴 자율 실행으로 보여주는가에 있다.
     </div>
   </div>
   <div class="footer"><span class="src">"Built upon the architectural foundation of Qwen 3.5, Qwen 3.8-Max scales to 2.4 trillion parameters" — Qwen3.8 blog</span><span class="pagenum">03</span></div>
@@ -153,10 +145,6 @@
         </div>
         <p style="font-size:17px; margin-top:10px; color:var(--ink-soft)">이 loop에서는 일반적으로 <strong>model weight가 업데이트되지 않는다</strong>.</p>
       </div>
-    </div>
-    <div class="interp">
-      "한 번의 500-turn trajectory 안에서 결과가 좋아졌다"는 것은 closed-loop <strong>in-context adaptation</strong>을
-      보여준다. 그 자체로 실행 중 model weight가 온라인 업데이트됐다는 뜻은 아니다.
     </div>
   </div>
   <div class="footer"><span class="src">loop 구조: Qwen3.8 blog 서술 기반 발표자 재구성</span><span class="pagenum">04</span></div>
@@ -230,7 +218,7 @@
   <div class="slide-body">
     <div class="cols">
       <div>
-        <h3 style="color:var(--teal)">Qwen이 주장하는 것 <span class="ev l1">공식</span></h3>
+        <h3 style="color:var(--teal)">Qwen이 주장하는 것</h3>
         <ul style="font-size:18px">
           <li>"jointly scaling RL environments and compute" → "general working competence"를 QwenWork · Claude Code · Codex · OpenClaw · Hermes에서 "uniformly" 향상</li>
           <li>Task/Workspace/Harness 독립 축 — 환경마다 개별 구축 없이 조합으로 확장 ("compounds combinatorially")</li>
@@ -241,7 +229,7 @@
         </figure>
       </div>
       <div>
-        <h3 style="color:var(--red)">공식 자료로 확인 안 되는 것 <span class="ev open">미공개</span></h3>
+        <h3 style="color:var(--red)">공식 자료로 확인 안 되는 것</h3>
         <ul style="font-size:19px">
           <li>전체 task × workspace × harness 조합의 학습 matrix</li>
           <li>harness별 sampling 비율 · trajectory 수</li>
@@ -251,16 +239,11 @@
         </ul>
       </div>
     </div>
-    <div class="interp">
-      가장 정확한 요약: "task·workspace·harness를 분리 가능한 축으로 만들고 <strong>다양한 조합에서</strong>
-      rollout을 생성하는 방향으로 확장했다고 주장한다. 전수 학습 matrix와 비율은 공개하지 않았다."
-      — 여러 harness에서 성능이 비슷하다는 결과는 harness-invariant policy의 증거일 수도,
-      비슷한 affordance를 가진 scaffold에서 평가됐다는 뜻일 수도 있다.
-    </div>
   </div>
   <div class="footer"><span class="src">Qwen3.8 blog 본문·각주 대조, 2026-08-07 · harness별 평가 설정 → Appendix A</span><span class="pagenum">06</span></div>
   <aside class="notes">
     <p><b>2분.</b> 이 슬라이드가 발표의 지적 성실성을 보여주는 곳. harness가 바뀌면 무엇이 달라지는지(tool schema, compaction, retry policy, budget) 구두로 3~4개만 예시.</p>
+    <p>구두 요약: "task·workspace·harness를 분리 가능한 축으로 만들고 다양한 조합에서 rollout을 생성하는 방향으로 확장했다고 주장한다. 전수 학습 matrix와 비율은 공개하지 않았다."</p>
     <p>질문 던지기: "여러 harness에서 비슷한 성능 = model이 harness-invariant인가, scaffold들이 서로 닮았기 때문인가?" — 통제 실험(같은 model, harness만 교체) 공개 여부는 Appendix open questions.</p>
   </aside>
 </section>
@@ -272,7 +255,7 @@
   <div class="slide-body">
     <div class="cols">
       <div>
-        <h3>Universal reward system <span class="ev l1">공식</span></h3>
+        <h3>Universal reward system</h3>
         <ul style="font-size:18px">
           <li><strong>Execution-based checking</strong> — test·실행 결과</li>
           <li><strong>Rubric-conditioned adjudication</strong> — text 및 rendered visual output 평가</li>
@@ -283,11 +266,11 @@
           난점: normalization · sparsity · judge bias · correlated error · <strong>reward hacking</strong>.
           aggregation formula 미공개 — 수식을 지어내지 않는다. reward hacking 인지의 공식 증거:
           NL2Repo 각주 "To prevent reward hacking, we disable Bash commands … such as pip download,
-          pip install, and git clone" <span class="ev l1">공식</span>
+          pip install, and git clone"
         </p>
       </div>
       <div>
-        <h3>Online data balancer <span class="ev l1">공식</span></h3>
+        <h3>Online data balancer</h3>
         <div class="claim" style="font-size:16px; margin-top:0">
           "shapes every batch to keep its distribution over <strong>tasks, difficulty, workspaces, and
           harnesses</strong> highly balanced, suppressing inter-batch gradient variance"
@@ -334,7 +317,7 @@
           <div class="tile"><div class="num">127</div><div class="lbl">PRs</div></div>
           <div class="tile"><div class="num">151</div><div class="lbl">issues</div></div>
         </div>
-        <p style="font-size:14px; color:var(--ink-soft); margin-top:6px">수치 기준일 2026-07-30 (Qwen 공식) <span class="ev l1">공식</span> · GitHub API 대조 2026-08-07: <strong>세 수치 모두 정확히 일치</strong> (created&lt;2026-07-31 필터) <span class="ev l2">repo 확인</span> · 현재 676 commits / 322 PRs / 388 issues, 계속 진행 중</p>
+        <p style="font-size:14px; color:var(--ink-soft); margin-top:6px">수치 기준일 2026-07-30 (Qwen 공식) · GitHub API 대조 2026-08-07: <strong>세 수치 모두 정확히 일치</strong> (created&lt;2026-07-31 필터) · 현재 676 commits / 322 PRs / 388 issues, 계속 진행 중</p>
       </div>
       <div style="flex:1; display:flex; flex-direction:column; min-height:0">
         <figure style="flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center">
@@ -345,12 +328,6 @@
             <a href="assets/oh-my-cli/autonomous-run.mp4" target="_blank">새 창에서 크게 열기</a> ·
             <a href="https://github.com/qwen-code-dev-bot/oh-my-cli">github.com/qwen-code-dev-bot/oh-my-cli</a></figcaption>
         </figure>
-        <div class="interp" style="font-size:15px; margin-bottom:0">
-          장기 실행을 <strong>가능하게 하는</strong> state·dispatch·verification·recovery 기계장치
-          (<code>AUTONOMY.md</code>, <code>.autonomy/</code>, agent-ready/active/blocked label)가 함께 있는 사례.
-          단, harness 규칙 수정은 <strong>agent가 issue로 제안 → 사람 maintainer가 반영</strong> —
-          완전한 자기수정이 아니다. <span class="ev l2">repo 확인</span>
-        </div>
       </div>
     </div>
   </div>
@@ -386,8 +363,8 @@
           <div class="tile"><div class="num">+2.7</div><div class="lbl">AIME24 vs 원 논문 방법</div></div>
         </div>
         <ul style="font-size:17.5px; margin-top:12px">
-          <li>~37시간: 원 논문 six main findings 재현 — 논문 방법이 random 대비 AIME24 +7.7% <span class="ev l1">공식</span></li>
-          <li>~88시간: "four rounds"에 걸쳐 자체 개선 아이디어 18개 — 49.58% → 52.29% (+2.71) <span class="ev l1">공식</span></li>
+          <li>~37시간: 원 논문 six main findings 재현 — 논문 방법이 random 대비 AIME24 +7.7%</li>
+          <li>~88시간: "four rounds"에 걸쳐 자체 개선 아이디어 18개 — 49.58% → 52.29% (+2.71)</li>
           <li>~7,600 LoC · <strong>1,100+ actions</strong> · 시작 조건 "nothing but the paper and a set of GPUs"</li>
         </ul>
       </div>
@@ -401,7 +378,7 @@
         </ul>
         <p style="font-size:15.5px; color:var(--ink-soft); margin-top:8px">
           과장 주의: 새 일반 이론의 발견이 아니라 <strong>특정 experimental setup 안에서의 개선</strong>.
-          독립 재현은 미확인 <span class="ev open">미검증</span>. 긴 실행 시간 ≠ 연구 신뢰성.
+          독립 재현은 미확인. 긴 실행 시간 ≠ 연구 신뢰성.
         </p>
       </div>
     </div>
@@ -478,14 +455,9 @@
       </svg>
     </div>
     <div class="cols" style="flex:0.6; gap:24px">
-      <div class="interp" style="font-size:16.5px; margin:0">
-        최대 개선은 syntax fix가 아니라 <strong>algorithm/datapath 수준의 rewrite</strong>(turn 22 — 한 번의
-        결정으로 6,288 gates, 전체 감소량의 80%+ <span class="ev l1" style="vertical-align:0">공식</span>)에서
-        나왔다. 후반 250턴도 local optimization이 지속 — 긴 tail이 실제로 유효했다.
-      </div>
       <div class="card" style="font-size:16.5px; margin:0">
         harness는 source·logs·metrics·평가 이력을 장기간 유지해야 했고, model은 이전 실패와
-        설계 결정을 context/외부 state로 재참조해야 했다. 13개 major milestone <span class="ev l1">공식</span>
+        설계 결정을 context/외부 state로 재참조해야 했다. 13개 major milestone
       </div>
     </div>
   </div>
@@ -541,7 +513,7 @@
       </div>
     </div>
   </div>
-  <div class="footer"><span class="src">수치: Qwen3.8 blog <span class="ev l1" style="vertical-align:0">공식</span> · 단계 구분: 발표자 정리</span><span class="pagenum">13</span></div>
+  <div class="footer"><span class="src">수치: Qwen3.8 blog · 단계 구분: 발표자 정리</span><span class="pagenum">13</span></div>
   <aside class="notes">
     <p><b>1.5분.</b> 인터랙티브 시각화는 블로그 칩 섹션의 공식 iframe embed("Neon Glass Chip City")의 로컬 사본 — 자기완결형 HTML이라 오프라인 동작, milestone별 gate 수·종류 HUD 포함. 발표 시 milestone 한두 개만 넘겨 보여주기(전체 탐색은 Q&A용, "새 창에서 크게 열기" 링크). WebGL이 안 되는 환경이면 HUD 카드만 떠도 수치는 전달됨. PDF 출력 시에는 die 비교 그림으로 자동 대체.</p>
     <p>오른쪽 단계 리스트에서 "✓/✗ 경계"를 명확히 — 이 발표에서 가장 중요한 증거-수준 구분. "fully guaranteed" 인용을 읽고, sign-off 관점에서 왜 과한지 한 문장으로.</p>
@@ -555,29 +527,26 @@
   <div class="slide-body">
     <div class="cols" style="gap:20px">
       <div class="card" style="border-top:4px solid var(--blue)">
-        <h3>Qwen <span class="ev l2">공개 demo</span></h3>
+        <h3>Qwen — 공개 demo</h3>
         <p style="font-size:17px">open-source EDA 환경에서 agent가 RTL·physical design을 최적화한 demonstration</p>
       </div>
       <div class="card" style="border-top:4px solid var(--teal)">
-        <h3>Anthropic <span class="ev l1">채용 신호</span></h3>
+        <h3>Anthropic — 채용 신호</h3>
         <figure><img src="assets/anthropic/job-posting-title.png" alt="Anthropic 공식 채용공고: Research Engineer, Chip Design RL" style="max-height:150px" onerror="this.style.display='none'">
         <figcaption style="font-size:11.5px">공식 채용 페이지 캡처 2026-08-07 (전체: appendix)</figcaption></figure>
         <p style="font-size:15.5px">"advance our models' ability to design silicon" — agentic RTL generation · (formal 포함) design verification · physical design optimization · EDA-tool latency · proxy rewards · production training runs. tape-out 경험을 good-fit으로 명시. $500K–850K.</p>
       </div>
       <div class="card" style="border-top:4px solid var(--amber)">
-        <h3>OpenAI Jalapeño <span class="ev l4">tape-out</span></h3>
+        <h3>OpenAI Jalapeño — tape-out</h3>
         <figure><img src="assets/openai/wafer.jpg" alt="OpenAI·Broadcom 경영진이 Jalapeño 웨이퍼를 들고 있는 공식 사진" style="max-height:168px" onerror="this.style.display='none'">
         <figcaption style="font-size:11.5px">OpenAI 공식 발표 사진, 2026-06-24</figcaption></figure>
         <p style="font-size:14.5px">Broadcom·Celestica와 첫 "Intelligence Processor" — design→tape-out "just nine months". engineering sample이 ML workload 실행 중. <strong>AI 기여는 "accelerate parts of the design" 한 구절뿐</strong> — 범위 미공개, 성능 측정 중.</p>
       </div>
     </div>
-    <div class="interp" style="font-size:18px">
-      세 사례의 증거 수준은 다르지만, AI model을 EDA tool과 verifier가 있는 폐루프에 연결해
-      chip-design workflow를 가속하려는 방향은 공통적이다.
-    </div>
   </div>
   <div class="footer"><span class="src">openai.com/index/openai-broadcom-jalapeno-inference-chip · job-boards.greenhouse.io/anthropic/jobs/5231612008 (2026-08-07 열람)</span><span class="pagenum">14</span></div>
   <aside class="notes">
+    <p>구두 마무리: 세 사례의 증거 수준은 다르지만, AI model을 EDA tool과 verifier가 있는 폐루프에 연결해 chip-design workflow를 가속하려는 방향은 공통적이다.</p>
     <p><b>1.5분.</b> 세 열을 같은 무게로 취급하지 않기 — Qwen=demo, Anthropic=채용 신호, OpenAI=실제 산업 tape-out(단 AI 기여도는 불투명). Jalapeño의 최종 성능은 미공개, technical report는 추후 공개 예정.</p>
   </aside>
 </section>
@@ -623,7 +592,7 @@
       </div>
     </div>
   </div>
-  <div class="footer"><span class="src">github.com/QwenLM/Qwen-MM-Plugins (README, 2026-08-07 열람) · capability별 tool 수·지원 harness → Appendix F</span><span class="pagenum">15</span></div>
+  <div class="footer"><span class="src"><a href="https://github.com/QwenLM/Qwen-MM-Plugins">github.com/QwenLM/Qwen-MM-Plugins</a> (README, 2026-08-07 열람) · capability별 tool 수·지원 harness → Appendix F</span><span class="pagenum">15</span></div>
   <aside class="notes">
     <p><b>1.5분.</b> 핵심 구분: Qwen3.8-Max weight(학습된 policy)와 Qwen-MM-Plugins(외부 확장 레이어)는 다르다. plugin 저장소에는 Qwen3.8·RL 언급이 전혀 없고(직접 확인), 이 plugin이 RL training 환경에 쓰였다는 공식 근거도 없다. 확인된 접점은 하나: LVBench/EgoLife 벤치마크 각주의 "a memory system built with Qwen-MM-Plugins" — 즉 <b>평가</b>에 쓰였다는 것.</p>
     <p>정직한 수치 하나(질문 대비): RecreationBench에서 Qwen3.8-Max 51.7 &lt; Fable5 56.1 — Qwen 스스로 공개한 열세 항목.</p>
@@ -649,7 +618,7 @@
         </ul>
       </div>
       <div>
-        <h3 style="color:var(--red)">아직 검증되지 않은 것 <span class="ev open">미검증</span></h3>
+        <h3 style="color:var(--red)">아직 검증되지 않은 것</h3>
         <ul style="font-size:18px">
           <li>실제 third-party adoption · 장기 유지보수</li>
           <li>Qwen/DashScope 종속성 · 타 model에서의 성능</li>
@@ -660,15 +629,11 @@
         </ul>
       </div>
     </div>
-    <div class="interp" style="font-size:17.5px">
-      아키텍처적 영향 가능성은 크다 — 멀티모달 능력을 특정 UI나 model endpoint에 가두지 않고 portable
-      harness capability로 패키징하기 때문이다. 다만 프로젝트가 새로워 생태계 채택과 production 안정성은
-      아직 검증 단계다. (GitHub stars ≠ 기술적 영향력)
-    </div>
   </div>
   <div class="footer"><span class="src">repo stats(별점·기여자 등)는 sources 페이지에 조회 날짜와 함께 기록</span><span class="pagenum">16</span></div>
   <aside class="notes">
     <p><b>1.5분.</b> "이미 표준이 됐다"고 말하지 않기. 좌우 균형이 이 슬라이드의 메시지 그 자체.</p>
+    <p>구두 평가: 아키텍처적 영향 가능성은 크다 — 멀티모달 능력을 특정 UI나 model endpoint에 가두지 않고 portable harness capability로 패키징하기 때문. 다만 프로젝트가 새로워 생태계 채택과 production 안정성은 검증 단계 (GitHub stars ≠ 기술적 영향력).</p>
   </aside>
 </section>
 
@@ -759,7 +724,7 @@
       3 · 칩 설계는 검증 가능한 폐루프 덕에 적합한 domain이지만, open-source 45nm flow와
       production tape-out 사이의 간극은 크다.
     </p>
-    <div class="interp" style="max-width:1080px; margin-top:18px; text-align:left; font-size:16.5px">
+    <div style="max-width:1080px; margin-top:18px; text-align:left; font-size:17px; line-height:1.6; border-top:2px solid var(--line); padding-top:16px">
       Qwen3.8 발표에서 가장 중요한 것은 또 하나의 더 큰 모델이 아니라, <strong>현실 업무를 rollout 가능하고
       reward 가능한 environment로 바꾸면 agent의 자율 수행 범위를 며칠 단위까지 확장할 수 있다는
       시스템적 가설</strong>이다. Qwen-MM-Plugins는 같은 방향을 multimodal domain으로 확장한다 —
